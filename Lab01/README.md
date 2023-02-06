@@ -29,63 +29,21 @@ terraform apply    # Wprowadza zmiany
 terraform destroy  # Usuwa zdefiniowane zasoby
 ```
 
-
-
-### Organizacja plików
-Terraform pozwala na dzielenie konfiguracji na kilka różnych plików. 
-
-Kod może być podzielony również na moduły, tak aby odseparować obiekty od siebie, ten temat będzie poruszony w innym labie.
-
-W trakcie uruchomienia Terraform łączy podzielone pliki w jeden.
-
-Przykładowa organizacja projektu o płaskiej strukturze:
-
-```
-rg/
-├─ rg.tf
-├─ variables.tf
-├─ outputs.tf
-├─ provider.tf
-
-```
-
-Na potrzeby separacji zasobów lub domen można podzielić projekt na moduły:
-
-Przykładowa organizacja projektu z wykorzystaniem modułów:
-```
-infrastructure/
-├─ infra.tf
-├─ variables.tf
-├─ providers.tf
-├─ outputs.tf
-├─ modules
-│  ├─ rg/
-│  │  ├─ rg.tf
-│  │  ├─ variables.tf
-│  │  ├─ outputs.tf
-│  │  ├─ provider.tf
-│  ├─ sa/
-│  │  ├─ sa.tf
-│  │  ├─ variables.tf
-│  │  ├─ outputs.tf
-│  │  ├─ provider.tf
-```
-
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
 Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom "Cloud Shell" i wybierz `Bash`.
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
 
 ```
-git clone <>
+git clone https://github.com/wguzik/tf-zadania.git
 ```
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
 ### Krok 1 - Zainicjalizuj Terraform
-- nawiguj do katalogu z repozytorium i Lab01
+- nawiguj do katalogu z repozytorium i katalogu Lab01
 ```bash
-cd <nazwarepo>/Lab01
+cd tf-zadania/Lab01
 ```
 
 - zainicjalizuj Terraform
@@ -95,7 +53,7 @@ terraform init
 
 Jakie informacje pojawiły się na ekranie?
 
-### Krok 2 - Upewnij się, że kod jest poprawny
+### Krok 2 - Zweryfikuj poprawność kodu
 
 ```bash
 terraform validate
@@ -105,7 +63,7 @@ Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azur
 
 Popraw błędy i ponów za pomocą wbudowanego edytora.
 
-### Krok 3 - Przejrzyj kod, zwróć uwagę, że jest nieuporządkowany
+### Krok 3 - Uporządkuj kod
 
 ```bash
 terraform fmt
