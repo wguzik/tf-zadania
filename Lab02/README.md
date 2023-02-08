@@ -66,50 +66,31 @@ terraform validate
 terraform plan
 ```
 
-### Krok 3 - Uporządkuj 
+### Krok 3 - Ukryj zmienne w pliku
 
-```bash
-terraform fmt
-```
-
-### Krok 4 - Zaplanuj stworzenie zasobów
-
-```bash
-terraform plan
-```
-
-Spróbuj ponownie podając parametr:
-
-```bash
-terraform plan -var="owner=<TwojeNazwisko>"
-```
-
-Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_storage_account`, żeby upewnić się co do wymagań stawianych nazwie zasobu.
-
-Stwórz zasoby.
-
-### Krok 5 - Stwórz zasoby
-
-```bash
-terraform apply -var="owner=<TwojeNazwisko>"
-```
-
-### Krok 6 - Ukryj zmienne w pliku
-
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner=<TwojeNazwisko>`.
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeNazwisko>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
+
+
+### Krok 4 - Stwórz zasoby
 
 ```bash
 terraform apply
 ```
 
-### Krok 7 - Usuń ręcznie Storage Account i odtwórz go za pomocą Terraforma
+### Krok 5 - Podejrzyj hasło w KeyVault w portalu
 
-W Portalu Azure znajdź Storage Account, którzy utworzyłeś/aś i usuń go ręcznie.
+### Krok 6 - Podejrzyj plik stanu
 
-Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwórz zasób.
+```bash
+ls -a
+cat terraform.tfstate
+```
 
+Przejrzyj uważnie plik i poszukaj frazy 'result', porównaj wartość z tą, którą odczytałeś/aś z KeyVault.
+
+Plik stanu w Terraformie trzyma informacje, w tym hasła w postaci zwykłego tekstu. Plik stanu jest kluczowy nie tylko ze względu na terraform jako taki, ale również przez fakt, że są w nim Twoje hasła.
 
 ### Krok 8 - Usuń zasoby
 

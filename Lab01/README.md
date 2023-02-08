@@ -38,7 +38,7 @@ Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDoc
 git clone https://github.com/wguzik/tf-zadania.git
 ```
 
-> Poniższe kroki realizuje się za pomocą Cloud Shell
+> Poniższe kroki realizuje się za pomocą Cloud Shell.
 
 ### Krok 1 - Zainicjalizuj Terraform
 - nawiguj do katalogu z repozytorium i katalogu Lab01
@@ -114,7 +114,8 @@ resource "azurerm_storage_account" "tfsa" {
   }
 }
 ```
-zamień na 
+zamień na:
+
 ```hcl
 resource "azurerm_storage_account" "tfsa" {
   #

@@ -5,7 +5,7 @@ Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ## Wstęp
 ### Cel
-Organizacja plików w terraform oraz pliki stanu.
+Cykl życia providera, różnice w wersjach i aktualizacja.
 
 Czas trwania: 30 minut
 
@@ -13,7 +13,6 @@ Czas trwania: 30 minut
 Provider to dodatek/biblioteka/rozszerzenie pozwalające na komunikowanie się Terraforma np. z chmurą Azure.
 
 Providery do popularnych usług są na bieżąco rozwijane, ponieważ te usługi same w sobie się zmieniają i Terraform musi 'umieć' obsłużyć nowe fuunkcjonalności.
-
 
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
 Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom "Cloud Shell" i wybierz `Bash`.
@@ -89,7 +88,7 @@ Jaki komunikat dostajesz?
   terraform init -upgrade
   ```
 
-### Krok 6 - Zaktualizuj serwer
+### Krok 6 - Zaktualizuj wersję serwera
 
 
 ```bash

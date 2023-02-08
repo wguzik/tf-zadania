@@ -62,3 +62,8 @@ resource "azurerm_key_vault_secret" "tfsecret" {
 output "keyvault_url" {
   value = azurerm_key_vault.tfkv.vault_uri
 }
+
+output "my_secret" {
+  value = azurerm_key_vault_secret.tfsecret
+  sensitive = true
+}
