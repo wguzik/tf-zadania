@@ -78,7 +78,7 @@ terraform plan
 Spróbuj ponownie podając parametr:
 
 ```bash
-terraform plan -var="owner=<TwojeNazwisko>"
+terraform plan -var="owner=<TwojeInicjaly>"
 ```
 
 Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_storage_account`, żeby upewnić się co do wymagań stawianych nazwie zasobu.
@@ -89,12 +89,12 @@ Stwórz zasoby.
 ### Krok 5 - Stwórz zasoby
 
 ```bash
-terraform apply -var="owner=<TwojeNazwisko>"
+terraform apply -var="owner=<TwojeInicjaly>"
 ```
 
 ### Krok 6 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeNazwisko>"`.
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
 
@@ -140,3 +140,6 @@ Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwó
 ```
 terraform destroy
 ```
+
+## Zadanie domowe
+Dodaj więcej do zmiennej `environment` ograniczenie dotyczące możliwych wartości, np 'dev', 'test', 'prod'.

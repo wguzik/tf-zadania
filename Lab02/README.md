@@ -68,7 +68,7 @@ terraform plan
 
 ### Krok 3 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeNazwisko>"`.
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
 
@@ -88,12 +88,16 @@ ls -a
 cat terraform.tfstate
 ```
 
-Przejrzyj uważnie plik i poszukaj frazy 'result', porównaj wartość z tą, którą odczytałeś/aś z KeyVault.
+Przejrzyj uważnie plik i poszukaj frazy `result`, porównaj wartość z tą, którą odczytałeś/aś z KeyVault.
 
-Plik stanu w Terraformie trzyma informacje, w tym hasła w postaci zwykłego tekstu. Plik stanu jest kluczowy nie tylko ze względu na terraform jako taki, ale również przez fakt, że są w nim Twoje hasła.
+Plik stanu w Terraformie przechowuje wiele informacji, w tym hasła w postaci zwykłego tekstu. Plik stanu jest kluczowy nie tylko ze względu na terraform jako taki, ale również przez fakt, że są w nim Twoje hasła.
 
 ### Krok 8 - Usuń zasoby
 
 ```
 terraform destroy
 ```
+
+## Zadanie domowe
+Stwórz Storage Account ręcznie, a następnie zaimportuj go do stanu.
+> Podpowiedź: warto wcześniej napisać w terraformie. `terraform plan` Twoim przyjacielem.
