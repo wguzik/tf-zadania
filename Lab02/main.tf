@@ -55,7 +55,7 @@ resource "azurerm_key_vault" "tfkv" {
 
 resource "azurerm_key_vault_secret" "tfsecret" {
   key_vault_id = azurerm_key_vault.tfkv.id
-  name = "tf_secret"
+  name = "tf-secret"
   value = random_password.password.result
 }
 

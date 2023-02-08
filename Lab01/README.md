@@ -34,7 +34,7 @@ Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
 
-```
+```bash
 git clone https://github.com/wguzik/tf-zadania.git
 ```
 
@@ -42,14 +42,14 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 ### Krok 1 - Zainicjalizuj Terraform
 - nawiguj do katalogu z repozytorium i katalogu Lab01
-```bash
-cd tf-zadania/Lab01
-```
+  ```bash
+  cd tf-zadania/Lab01
+  ```
 
 - zainicjalizuj Terraform
-```bash
-terraform init
-```
+  ```bash
+  terraform init
+  ```
 
 Jakie informacje pojawiły się na ekranie?
 

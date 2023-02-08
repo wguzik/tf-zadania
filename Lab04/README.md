@@ -1,4 +1,4 @@
-# Lab02 - Organizacja plików i stan
+# Lab04 - Moduły
 
 ## Wymagania
 Aktywna subskrypcja w Azure i dostęp do portalu.
@@ -19,54 +19,71 @@ W trakcie uruchomienia Terraform łączy podzielone pliki w jeden.
 Przykładowa organizacja projektu o płaskiej strukturze:
 
 ```
-resource/
-├─ main.tf
+rg/
+├─ rg.tf
 ├─ variables.tf
 ├─ outputs.tf
-├─ providers.tf
+├─ provider.tf
 
 ```
 
-### Plik stanu
-Terraform w *uproszczeniu* korzysta z trzech źródeł do określenia tego:
-- co potrzebuje stworzyć - pliki *.tf. Pliki tworzysz Ty, wybierasz zasoby, które chcesz stworzyć, jak je nazwać i jakie mają mieć parametry.
-- co jest - API chmury (innego obiektu, który chcemy skonfigurować) - dzięki providerowi Terraform wie jak rozmawiać z danym dostawcą i może się dowiedzieć, czy dane zasoby istnieją, czy możne je skonfigurować w wybrany sposób
-- co uważa, że powinno być - plik stanu - w trakcie tworzenia zasobów Terraform tworzy plik stanu **.tfstate*, jest to jeden z kluczowych elementów sukcesu terraforma. Dzięki plikowi stanu wiemy czym terraform zarządza i m.in. jakie zmiany wydarzyły się od ostatniego uruchomienia (zarówno w kodzie jak i w chmurze). Tymczasowo plik stanu będzie przechowywany u Ciebie, ale docelowo będziesz go hostować gdzie indziej.
+Na potrzeby separacji zasobów lub domen można podzielić projekt na moduły:
 
+Przykładowa organizacja projektu z wykorzystaniem modułów:
+```
+infrastructure/
+├─ infra.tf
+├─ variables.tf
+├─ providers.tf
+├─ outputs.tf
+├─ modules
+│  ├─ rg/
+│  │  ├─ rg.tf
+│  │  ├─ variables.tf
+│  │  ├─ outputs.tf
+│  │  ├─ provider.tf
+│  ├─ sa/
+│  │  ├─ sa.tf
+│  │  ├─ variables.tf
+│  │  ├─ outputs.tf
+│  │  ├─ provider.tf
+```
 
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
 Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom "Cloud Shell" i wybierz `Bash`.
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
 
-```bash
-git clone https://github.com/wguzik/tf-zadania.git
+```
+git clone <>
 ```
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
-### Krok 1 - utwórz właścwie pliki i zreorganizuj obiekty
-- nawiguj do katalogu z repozytorium i katalogu Lab02
+### Krok 1 - Zainicjalizuj Terraform
+- nawiguj do katalogu z repozytorium i Lab01
 ```bash
-cd tf-zadania/Lab02
+cd <nazwarepo>/Lab01
 ```
 
-- utwórz pliki i przenieś odpowiednie bloki to odpowiednich plików
+- zainicjalizuj Terraform
 ```bash
-touch providers.tf
-touch versions.tf
-touch outputs.tf
+terraform init
 ```
 
-### Krok 2 - Zweryfikuj poprawność kodu
+Jakie informacje pojawiły się na ekranie?
+
+### Krok 2 - Upewnij się, że kod jest poprawny
 
 ```bash
-terraform fmt
 terraform validate
-terraform plan
 ```
 
-### Krok 3 - Uporządkuj 
+Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_resource_group`, żeby sprawdzić listę niezbędnych parametrów.
+
+Popraw błędy i ponów.
+
+### Krok 3 - Przejrzyj kod, zwróć uwagę, że jest nieuporządkowany
 
 ```bash
 terraform fmt
