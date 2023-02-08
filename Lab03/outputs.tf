@@ -1,3 +1,3 @@
 output "PostreSQL_URL" {
-  value = azurerm_mysql_flexible_server.tfpsql.fqdn
+  value = azurerm_postgresql_flexible_server.tfpsql.fqdn
 }
