@@ -7,7 +7,7 @@ Aktywna subskrypcja w Azure i dostęp do portalu.
 ### Cel
 Podział projektu na moduły.
 
-Czas trwania: 30 minut
+Czas trwania: 45 minut
 
 ### Organizacja plików
 
@@ -85,50 +85,49 @@ terraform validate
 terraform plan
 ```
 
-### Krok 3 - Przejrzyj kod, zwróć uwagę, że jest nieuporządkowany
 
+### Krok 3 - Zweryfikuj kod
 
+Znajdź fragmenty opisane zaczynające się od `##` i uzupełnij brakujący kod.
 
-### Krok 4 - Zaplanuj stworzenie zasobów
+Odkomentuj zaczytanie modułu `vm`.
 
-```bash
-terraform plan
-```
-
-Spróbuj ponownie podając parametr:
-
-```bash
-terraform plan -var="owner=<TwojeInicjaly>"
-```
-
-Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_storage_account`, żeby upewnić się co do wymagań stawianych nazwie zasobu.
-
-Stwórz zasoby.
-
-### Krok 5 - Stwórz zasoby
-
-```bash
-terraform apply -var="owner=<TwojeInicjaly>"
-```
-
-### Krok 6 - Ukryj zmienne w pliku
-
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner=<TwojeInicjaly>`.
-
-Terraform automatycznie zaczyta jego zawartość.
+### Krok 4 - Stwórz zasoby
 
 ```bash
 terraform apply
 ```
 
-### Krok 7 - Usuń ręcznie Storage Account i odtwórz go za pomocą Terraforma
+Coś poszło nie tak?
 
-W Portalu Azure znajdź Storage Account, którzy utworzyłeś/aś i usuń go ręcznie.
+Sprawdź zasoby w portalu, które powstały. Spróbuj ponowić - czy Terraform będzie chciał zamienić wszystko?
 
-Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwórz zasób.
+I co tym razem?
+Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów.
 
+Okazuje się, że zdefiniowany obraz nie jest odpowiedni. Skąd wziąć właściwe informacje?
 
-### Krok 8 - Usuń zasoby
+Uruchom:
+```
+az vm image list --all --publisher="Canonical" --sku="20_04-lts"
+```
+
+i w pliku [modules/vm/main.tf](Lab04\modules\vm\main.tf) umieść odpowiednie informacje:
+
+```hcl
+resource "azurerm_linux_virtual_machine" "tfvm01" {
+  ##
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "20.04.202302070"
+  }
+}
+```
+
+### Krok 5 - Usuń zasoby
 
 ```
 terraform destroy
@@ -136,3 +135,6 @@ terraform destroy
 
 ## Zadanie domowe
 Dodaj moduł do KeyVaulta i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane uprzednio, zapisywane do KeyVaulta i żeby maszyna pobierała je z niego.
+
+## Zadanie domowe 2
+Dodaj drugi subnet i drugą maszynę wirtualną, która będzie go używać.
