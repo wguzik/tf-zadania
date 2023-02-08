@@ -47,50 +47,65 @@ terraform validate
 terraform plan
 ```
 
-### Krok 3 - stwórz serwer PostgreSQL
+### Krok 3 - Stwórz serwer PostgreSQL
 
 ```bash
 terraform apply -var="owner=<yourinitials>"
 ```
 
-### Krok 4 - Zmień wersję
+Popraw błędy, jeżeli jakieś występują.
 
-```bash
-terraform plan
+### Krok 4 - Zmień wersję serwera
+
+```hcl
+resource "azurerm_postgresql_flexible_server" "tfpsql" {
+  version                = 11 #-> 14
+  # ...
+  zone                   = "1"
+}
 ```
 
-Spróbuj ponownie podając parametr:
-
 ```bash
-terraform plan -var="owner=<TwojeNazwisko>"
+terraform apply -var="owner=<yourinitials>"
 ```
 
-Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_storage_account`, żeby upewnić się co do wymagań stawianych nazwie zasobu.
+Jaki komunikat dostajesz?
 
-Stwórz zasoby.
+### Krok 5 - Zweryfikuj wersję użytego providera i użyj nowszego w kodzie
 
-### Krok 5 - Stwórz zasoby
+- znajdź najnowszą wersję providera i zweryfikuj dostępne wersje servera PostgreSQL: [postgresql_flexible_server](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/postgresql_flexible_server)
+  ```hcl
+  terraform {
+    required_providers {
+      azurerm = {
+        source  = "hashicorp/azurerm"
+        version = "~>x.x.x" # sprawdź jakie możliwości we wskazywaniu wersji proponuje Terraform
+      }
+    }
+  }
+  ```
+- zmiana wersji wymaga ponowego zainicjalizowania Terraforma
+  ```bash
+  terraform init -upgrade
+  ```
+
+### Krok 6 - Zaktualizuj serwer
+
 
 ```bash
-terraform apply -var="owner=<TwojeNazwisko>"
+terraform apply -var="owner=<yourinitials>"
 ```
 
-### Krok 6 - Ukryj zmienne w pliku
+Prześledź dokładnie informację - okazuje się, że terraform chce zniszczyć obecny serwer i zastąpić go nowym.
+To jest jedna z tych sytuacji, kiedy ani Terraform, ani provider nie mają możliwości zrobienia tego w inny sposób. To ograniczenie pochodzi od samego dostawcy chmury [Upgrade PostgreSQL](https://learn.microsoft.com/en-us/azure/postgresql/single-server/how-to-upgrade-using-dump-and-restore).
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner=<TwojeNazwisko>`.
+### Krok 8 - Zmień hasło
 
-Terraform automatycznie zaczyta jego zawartość.
+Zmień hasło w kodzie i spróbuj zaaplikować konfigurację.
 
 ```bash
-terraform apply
+terraform apply -var="owner=<yourinitials>"
 ```
-
-### Krok 7 - Usuń ręcznie Storage Account i odtwórz go za pomocą Terraforma
-
-W Portalu Azure znajdź Storage Account, którzy utworzyłeś/aś i usuń go ręcznie.
-
-Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwórz zasób.
-
 
 ### Krok 8 - Usuń zasoby
 
