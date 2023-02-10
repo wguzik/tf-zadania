@@ -26,7 +26,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
 ### Krok 1 - Zainicjalizuj Terraform
-- nawiguj do katalogu z repozytorium i Lab01
+- nawiguj do katalogu z repozytorium i Lab03
   ```bash
   cd tf-zadania/Lab03
   ```
@@ -35,8 +35,6 @@ git clone https://github.com/wguzik/tf-zadania.git
   ```bash
   terraform init
   ```
-
-Jakie informacje pojawiły się na ekranie?
 
 ### Krok 2 - Zweryfikuj kod
 
@@ -89,7 +87,6 @@ Jaki komunikat dostajesz?
   ```
 
 ### Krok 6 - Zaktualizuj wersję serwera
-
 
 ```bash
 terraform apply -var="owner=<yourinitials>"

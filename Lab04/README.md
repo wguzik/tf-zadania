@@ -5,29 +5,19 @@ Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ## Wstęp
 ### Cel
-Organizacja plików w terraform oraz pliki stanu.
+Podział projektu na moduły.
 
-Czas trwania: 30 minut
+Czas trwania: 45 minut
 
 ### Organizacja plików
-Terraform pozwala na dzielenie konfiguracji na kilka różnych plików. 
 
-Kod może być podzielony również na moduły, tak aby odseparować obiekty od siebie, ten temat będzie poruszony w innym miejscu.
+Kod może być podzielony na moduły, tak aby odseparować zasoby od siebie.
 
-W trakcie uruchomienia Terraform łączy podzielone pliki w jeden.
+Nie oznacza to, że można nimi zarządzać w pełni oddzielnie, niemniej ułatwia to pracę i pozwala łatwiej zapanować nad zależnościami, takimi jak np. maszyny wirtualne, które w trakcie tworzenia muszą być podłączone do sieci wirtualnej.
 
-Przykładowa organizacja projektu o płaskiej strukturze:
+Odpowiednio wykorzystane obiekty `output` pozwalają udostępnić niezbędne informacje dalej.
 
-```
-rg/
-├─ rg.tf
-├─ variables.tf
-├─ outputs.tf
-├─ provider.tf
-
-```
-
-Na potrzeby separacji zasobów lub domen można podzielić projekt na moduły:
+Typ obiektu `data` pozwala się odwołać do istniejącego obiektu.
 
 Przykładowa organizacja projektu z wykorzystaniem modułów:
 ```
@@ -38,12 +28,17 @@ infrastructure/
 ├─ outputs.tf
 ├─ modules
 │  ├─ rg/
-│  │  ├─ rg.tf
+│  │  ├─ main.tf
 │  │  ├─ variables.tf
 │  │  ├─ outputs.tf
 │  │  ├─ provider.tf
-│  ├─ sa/
-│  │  ├─ sa.tf
+│  ├─ vnet/
+│  │  ├─ main.tf
+│  │  ├─ variables.tf
+│  │  ├─ outputs.tf
+│  │  ├─ provider.tf
+│  ├─ vm/
+│  │  ├─ main.tf
 │  │  ├─ variables.tf
 │  │  ├─ outputs.tf
 │  │  ├─ provider.tf
@@ -54,82 +49,92 @@ Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
 
-```
-git clone <>
+```bash
+git clone https://github.com/wguzik/tf-zadania.git
 ```
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
 ### Krok 1 - Zainicjalizuj Terraform
-- nawiguj do katalogu z repozytorium i Lab01
-```bash
-cd <nazwarepo>/Lab01
-```
+- nawiguj do katalogu z repozytorium i Lab04
+  ```bash
+  cd tf-zadania/Lab04
+  ```
 
 - zainicjalizuj Terraform
-```bash
-terraform init
+  ```bash
+  terraform init
+  ```
+
+### Krok 2 - Ukryj zmienne w pliku
+
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` o treści:
+
+```
+owner= "<Twojenicjaly>
+env= "dev"
 ```
 
-Jakie informacje pojawiły się na ekranie?
+Terraform automatycznie zaczyta jego zawartość.
 
-### Krok 2 - Upewnij się, że kod jest poprawny
-
-```bash
-terraform validate
-```
-
-Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_resource_group`, żeby sprawdzić listę niezbędnych parametrów.
-
-Popraw błędy i ponów.
-
-### Krok 3 - Przejrzyj kod, zwróć uwagę, że jest nieuporządkowany
+### Krok 3 - Upewnij się, że kod jest poprawny
 
 ```bash
 terraform fmt
-```
-
-### Krok 4 - Zaplanuj stworzenie zasobów
-
-```bash
+terraform validate
 terraform plan
 ```
 
-Spróbuj ponownie podając parametr:
 
-```bash
-terraform plan -var="owner=<TwojeNazwisko>"
-```
+### Krok 3 - Zweryfikuj kod
 
-Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_storage_account`, żeby upewnić się co do wymagań stawianych nazwie zasobu.
+Znajdź fragmenty opisane zaczynające się od `##` i uzupełnij brakujący kod.
 
-Stwórz zasoby.
+Odkomentuj zaczytanie modułu `vm`.
 
-### Krok 5 - Stwórz zasoby
-
-```bash
-terraform apply -var="owner=<TwojeNazwisko>"
-```
-
-### Krok 6 - Ukryj zmienne w pliku
-
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner=<TwojeNazwisko>`.
-
-Terraform automatycznie zaczyta jego zawartość.
+### Krok 4 - Stwórz zasoby
 
 ```bash
 terraform apply
 ```
 
-### Krok 7 - Usuń ręcznie Storage Account i odtwórz go za pomocą Terraforma
+Coś poszło nie tak?
 
-W Portalu Azure znajdź Storage Account, którzy utworzyłeś/aś i usuń go ręcznie.
+Sprawdź zasoby w portalu, które powstały. Spróbuj ponowić - czy Terraform będzie chciał zamienić wszystko?
 
-Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwórz zasób.
+I co tym razem?
+Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów.
 
+Okazuje się, że zdefiniowany obraz nie jest odpowiedni. Skąd wziąć właściwe informacje?
 
-### Krok 8 - Usuń zasoby
+Uruchom:
+```
+az vm image list --all --publisher="Canonical" --sku="20_04-lts"
+```
+
+i w pliku [modules/vm/main.tf](Lab04\modules\vm\main.tf) umieść odpowiednie informacje:
+
+```hcl
+resource "azurerm_linux_virtual_machine" "tfvm01" {
+  ##
+
+  source_image_reference {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts-gen2"
+    version   = "20.04.202302070"
+  }
+}
+```
+
+### Krok 5 - Usuń zasoby
 
 ```
 terraform destroy
 ```
+
+## Zadanie domowe
+Dodaj moduł do KeyVaulta i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane uprzednio, zapisywane do KeyVaulta i żeby maszyna pobierała je z niego.
+
+## Zadanie domowe 2
+Dodaj drugi subnet i drugą maszynę wirtualną, która będzie go używać.
