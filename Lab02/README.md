@@ -99,5 +99,6 @@ terraform destroy
 ```
 
 ## Zadanie domowe
+
 Stwórz Storage Account ręcznie, a następnie zaimportuj go do stanu.
 > Podpowiedź: warto wcześniej napisać w terraformie. `terraform plan` Twoim przyjacielem.

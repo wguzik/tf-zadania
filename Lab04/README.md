@@ -44,7 +44,10 @@ infrastructure/
 │  │  ├─ provider.tf
 ```
 
+> Uwaga! To ćwiczenie polega w dużej mierze na rozwiązywaniu problemów. Ono z zasady nie działa od razu. Nie krępuj się zmieniać kod, próbować, psuć i naprawiać.
+
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
+
 Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom "Cloud Shell" i wybierz `Bash`.
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
@@ -56,6 +59,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
 ### Krok 1 - Zainicjalizuj Terraform
+
 - nawiguj do katalogu z repozytorium i Lab04
   ```bash
   cd tf-zadania/Lab04
@@ -85,7 +89,6 @@ terraform validate
 terraform plan
 ```
 
-
 ### Krok 3 - Zweryfikuj kod
 
 Znajdź fragmenty opisane zaczynające się od `##` i uzupełnij brakujący kod.
@@ -102,7 +105,8 @@ Coś poszło nie tak?
 
 Sprawdź zasoby w portalu, które powstały. Spróbuj ponowić - czy Terraform będzie chciał zamienić wszystko?
 
-I co tym razem?
+Jaką tym razem napotkałeś/aś przeszkodę?
+
 Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów.
 
 Okazuje się, że zdefiniowany obraz nie jest odpowiedni. Skąd wziąć właściwe informacje?
@@ -134,7 +138,9 @@ terraform destroy
 ```
 
 ## Zadanie domowe
+
 Dodaj moduł do KeyVaulta i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane uprzednio, zapisywane do KeyVaulta i żeby maszyna pobierała je z niego.
 
 ## Zadanie domowe 2
+
 Dodaj drugi subnet i drugą maszynę wirtualną, która będzie go używać.
