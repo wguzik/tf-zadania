@@ -57,38 +57,42 @@ terraform plan
 terraform apply
 ```
 
-### Krok 4 - Stwórz infrastrukturę
+### Krok 5 - Skonfiguruj prometheus za pomocą helm chart
 
-az aks get-credentials -n name_of_k8s_cluster -g resource_group_name 
+Zaloguj się do AKS używając polecenia z terraform output:
 
+```bash
+az aks get-credentials --name <clusterName> --resource-group <resourceGroupName>
+```
+
+Dodaje namespace dla monitoringu:
+
+```bash
+kubectl create namespace monitoring
+```
+
+Dodaj helm repo:
+```bash
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
 
+Zainstaluj prometheus i grafane:
+
+```bash
 helm install prometheus \
   prometheus-community/kube-prometheus-stack \
-  --namespace monitoring \
-  --create-namespace
-
-  kubectl port-forward svc/prometheus-grafana -n monitoring 4000:80
-
-  kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n monitoring 4001:9090
+  --namespace monitoring
+```
 
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-spec:
-  selector:
-    matchLabels:
-      app: nginxdeployment
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: nginxdeployment
-    spec:
-      containers:
-      - name: nginxdeployment
-        image: nginx:latest
-        ports:
-        - containerPort: 80
+Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy (localhost:4000):
+```bash
+kubectl port-forward svc/prometheus-grafana --namespace monitoring 4000:80
+//creds: admin/prom-operator
+```
+
+```bash
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus --namespace monitoring 4001:9090
+```
+
