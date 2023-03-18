@@ -3,6 +3,11 @@ variable "rg_name" {
   default = "wg"
 }
 
+variable "postfix" {
+  type    = string
+  default = "wg-dev-westeurope"
+}
+
 variable "vnet_name" {
   type    = string
   default = "vnet-wg-dev-westeurope"
@@ -13,7 +18,3 @@ variable "subnet_default_name" {
   default = "snet-wg-dev-westeurope"
 }
 
-variable "postfix" {
-  type    = string
-  default = "wg-dev-westeurope"
-}

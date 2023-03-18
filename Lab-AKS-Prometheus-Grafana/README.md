@@ -57,7 +57,7 @@ terraform plan
 terraform apply
 ```
 
-### Krok 5 - Skonfiguruj prometheus za pomocą helm chart
+### Krok 4 - Skonfiguruj prometheus za pomocą helm chart
 
 Zaloguj się do AKS używając polecenia z terraform output:
 
@@ -84,7 +84,6 @@ helm install prometheus \
   prometheus-community/kube-prometheus-stack \
   --namespace monitoring
 ```
-
 
 Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy (localhost:4000):
 ```bash
