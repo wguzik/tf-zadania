@@ -57,5 +57,5 @@ terraform plan
 terraform apply
 ```
 
-### Krok 4 - Skonfiguruj prometheus za pomocą helm chart
+### Krok 4 - Zweryfikuj ustawienia monitoringu
 
