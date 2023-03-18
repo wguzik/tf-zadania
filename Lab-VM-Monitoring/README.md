@@ -1,4 +1,4 @@
-# Lab - AKS, Prometheus, Grafana
+# Lab - VM, Monitoring
 
 ***W budowe!***
 
@@ -28,7 +28,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 - nawiguj do katalogu z repozytorium i Lab04
   ```bash
-  cd tf-zadania/Lab-AKS-Prometheus-Grafana
+  cd tf-zadania/Lab-VM-Monitoring
   ```
 
 - zainicjalizuj Terraform
@@ -57,41 +57,5 @@ terraform plan
 terraform apply
 ```
 
-### Krok 4 - Skonfiguruj prometheus za pomocą helm chart
-
-Zaloguj się do AKS używając polecenia z terraform output:
-
-```bash
-az aks get-credentials --name <clusterName> --resource-group <resourceGroupName>
-```
-
-Dodaje namespace dla monitoringu:
-
-```bash
-kubectl create namespace monitoring
-```
-
-Dodaj helm repo:
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-```
-
-Zainstaluj prometheus i grafane:
-
-```bash
-helm install prometheus \
-  prometheus-community/kube-prometheus-stack \
-  --namespace monitoring
-```
-
-Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy (localhost:4000):
-```bash
-kubectl port-forward svc/prometheus-grafana --namespace monitoring 4000:80
-//creds: admin/prom-operator
-```
-
-```bash
-kubectl port-forward svc/prometheus-kube-prometheus-prometheus --namespace monitoring 4001:9090
-```
+### Krok 4 - Zweryfikuj ustawienia monitoringu
 
