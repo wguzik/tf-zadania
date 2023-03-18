@@ -1,4 +1,3 @@
-
 resource "azurerm_log_analytics_workspace" "law" {
   name                = "law-${var.postfix}"
   location            = data.azurerm_resource_group.rg.location

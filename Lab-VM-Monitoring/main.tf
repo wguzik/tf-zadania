@@ -1,9 +1,3 @@
-locals {
-  postfix        = "${var.project}-${var.environment}-${var.location}"
-  postfix_shared = "${var.project}-shared-${var.location}"
-}
-
-
 module "rg_shared" {
   source = "./modules/rg"
 
@@ -67,8 +61,6 @@ module "vm" {
   kv_name        = module.kv.kv_name
   law_id         = module.monitoring.law_id
   law_key        = module.monitoring.law_key
-
-  //monitor_data_collection_rule_name = module.monitoring.monitor_data_collection_rule_name
 
   depends_on = [
     module.vnet
