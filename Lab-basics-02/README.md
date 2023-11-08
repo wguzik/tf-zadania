@@ -75,7 +75,7 @@ terraform plan
 
 ### Krok 3 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeInicjaly>"`.
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner="<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
 

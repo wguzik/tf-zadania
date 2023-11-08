@@ -40,66 +40,137 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 ### Krok 1 - utwórz dedykowaną Resource Group i Storage Account na potrzeby backendu
 
+- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03` i uruchom skryp do tworzenia podstawowych zasobów
 ```bash
-az create group --location 'westeurope' --name 'tfstate'
-
-az create storage account
+cd tf-zadania/Lab-basics-03/scripts
+chmod +x createInfra.sh
+./createInfra.sh
 ```
 
+### Krok 2 - Skonfiguruj backend
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03`
 ```bash
-cd tf-zadania/Lab-basics-03
+cd tf-zadania/Lab-basics-03/infra
 ```
 
-- utwórz pliki i przenieś odpowiednie bloki to odpowiednich plików
+- dodaj blok do obsługi backendu wewnątrz bloku `terraform` w pliku `providers.tf` i umieść właściwie wartości
+
+```hcl
+terraform {
+  backend "azurerm" {
+    resource_group_name  = "<remote_backend_rg>"
+    storage_account_name = "<remote_backend_storage_account>"
+    container_name       = "dev" #dev one
+    key                  = "terraform.tfstate"
+  }
+ //...
+}
+```
+
+> Używamy uproszczonej konfiguracji, która wymaga, że użytkownik jest zalogowany. Jest to mało praktyczne, zazwyczaj używa się klucza/SAS tokenu, ale w celu uproszczenia przykładu ten frament pominąłem.
+
+- zainicjalizuj konfigurację
+
 ```bash
-touch providers.tf
-touch versions.tf
-touch outputs.tf
+terraform init
+# poczekaj na output
 ```
 
-### Krok 2 - Zweryfikuj poprawność kodu
+- podejrzyj plik - nawiguj do odpowiedniego Storage Account w Azure i znajdź plik stanu w kontenerze `dev`
+
+```bash
+# opcjonalnie skorzytaj z wiersza poleceń
+az storage blob list --account-name $SANAME --container-name dev -o table
+```
+
+### Krok 3 - Ukryj zmienne w pliku
+
+W katalogu z plikami *.tf zweryfikuj zawartość `envs/dev.tfvars` i upewnij się, że dane są właście: inicjały i nazwa środowiska.
+
+### Krok 4 - Zweryfikuj poprawność kodu i utwórz zasoby
 
 ```bash
 terraform fmt
 terraform validate
 terraform plan
+
+terraform apply -var-file='envs/dev.tfvars'
 ```
 
-### Krok 3 - Ukryj zmienne w pliku
+### Krok 5 - Utwórz plik konfiguracyjny dla backendu dla środowiska prod
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeInicjaly>"`.
-
-Terraform automatycznie zaczyta jego zawartość.
-
-
-### Krok 4 - Stwórz zasoby
+- skopiuj plik `env.backend.hcl.example` i zmień mu nazwę
 
 ```bash
-terraform apply
+cp env.backend.hcl.example prod.backend.hcl
 ```
 
-### Krok 5 - Podejrzyj hasło w KeyVault w portalu
+- uzupełnij dane `Storage account` podobnie jak w pliku `providers.tf`, wskaż `container` o nazwie `prod` (został uprzednio utworzony przez skrypt)
 
-### Krok 6 - Podejrzyj plik stanu
+```hcl
+resource_group_name  = "<>"
+storage_account_name = "<>"
+container_name       = "prod"
+key                  = "terraform.tfstate"
+```
+
+### Krok 6 - Zainicuj konfigurację
 
 ```bash
-ls -a
-cat terraform.tfstate
+terraform init -backend-config='prod.backend.hcl' -reconfigure
+terraform apply -var-file='prod.tfvars'
 ```
 
-Przejrzyj uważnie plik i poszukaj frazy `result`, porównaj wartość z tą, którą odczytałeś/aś z KeyVault.
+### Krok 7 - Ukryj zmienne w pliku
 
-Plik stanu w Terraformie przechowuje wiele informacji, w tym hasła w postaci zwykłego tekstu. Plik stanu jest kluczowy nie tylko ze względu na terraform jako taki, ale również przez fakt, że są w nim Twoje hasła.
+W katalogu z plikami *.tf zweryfikuj zawartość `envs/prod.tfvars` i upewnij się, że dane są właście: inicjały i nazwa środowiska.
 
-### Krok 8 - Usuń zasoby
+### Krok 8 - Stwórz zasoby
 
+```bash
+terraform apply -var-file='envs/prod.tfvars'
 ```
+
+### Krok 9 - Spróbuj 'omyłkowo' użyć złego pliku ze zmiennymi
+
+```bash
+terraform apply -var-file='envs/dev.tfvars'
+```
+
+### Krok 10 - Powróć do backendu środowiska dev
+
+```bash
+terraform init -reconfigure
+```
+
+### Krok 11 - Usuń plik stanu ze Storage Account
+
+- usuń plik stanu ze `Storage Account` z kontenera `dev`
+
+- upewnij się, że zasoby istnieją
+
+- uruchom plan
+
+```bash
+terraform plan
+```
+
+### Krok 12 - Usuń zasoby
+
+- terraform
+
+```bash
 terraform destroy
+# pamiętaj o przełączeniu backendu, środowisko dev musisz usunąć częściowo ręcznie
 ```
+
+- `Resource group` i `Storage Account` do przetrzymywania stanu musisz usunąć ręcznie
+
+## Uwagi
+To podejście wymaga sporej uwagi, a ryzyko błędu jest duże.
+Ciekawsze rozwiązanie to `workspaces` z Terraform Cloud lub SpaceLift.
 
 ## Zadanie domowe
-
-Stwórz Storage Account ręcznie, a następnie zaimportuj go do stanu.
-> Podpowiedź: warto wcześniej napisać w terraformie. `terraform plan` Twoim przyjacielem.
+Dodaj kolejne środowisko, np. test.
+Poeksperymentuj usuwaniem i dodawaniem obiektów do pliku stanu, np. `terraform state rm`.
