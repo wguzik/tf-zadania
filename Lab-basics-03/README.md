@@ -54,6 +54,11 @@ chmod +x createInfra.sh
 cd tf-zadania/Lab-basics-03/infra
 ```
 
+- uruchom edytor VS Code
+```
+code .
+```
+
 - dodaj blok do obsługi backendu wewnątrz bloku `terraform` w pliku `providers.tf` i umieść właściwie wartości
 
 ```hcl
@@ -91,9 +96,9 @@ W katalogu z plikami *.tf zweryfikuj zawartość `envs/dev.tfvars` i upewnij si�
 ### Krok 4 - Zweryfikuj poprawność kodu i utwórz zasoby
 
 ```bash
-terraform fmt
+terraform fmt -recursive
 terraform validate
-terraform plan
+terraform plan -var-file='envs/dev.tfvars'
 
 terraform apply -var-file='envs/dev.tfvars'
 ```
@@ -119,7 +124,6 @@ key                  = "terraform.tfstate"
 
 ```bash
 terraform init -backend-config='prod.backend.hcl' -reconfigure
-terraform apply -var-file='prod.tfvars'
 ```
 
 ### Krok 7 - Ukryj zmienne w pliku
@@ -161,7 +165,7 @@ terraform plan
 - terraform
 
 ```bash
-terraform destroy
+terraform destroy -var=owner=wg
 # pamiętaj o przełączeniu backendu, środowisko dev musisz usunąć częściowo ręcznie
 ```
 
@@ -170,6 +174,8 @@ terraform destroy
 ## Uwagi
 To podejście wymaga sporej uwagi, a ryzyko błędu jest duże.
 Ciekawsze rozwiązanie to `workspaces` z Terraform Cloud lub SpaceLift.
+
+Zarządzanie dostępem i kopiami bezpieczeństwa to dodatkowe problemy, które leżą teraz na Twoich barkach.
 
 ## Zadanie domowe
 Dodaj kolejne środowisko, np. test.
