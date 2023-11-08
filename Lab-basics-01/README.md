@@ -1,15 +1,19 @@
-# Lab01 - tworzenie zasobów w terraform
+# Lab - Podstawy tworzenienia zasobów w Terraform
 
 ## Wymagania
+
 Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ## Wstęp
+
 ### Cel
+
 Podstawy organizacji plików, korzystania z `terraform CLI` oraz tworzenia zasobów w chmurze.
 
 Czas trwania: 30 minut
 
 ### Typy obiektów
+
 Terraform pozwala na tworzenie obiektów:
 - `resource` - zasób, te obiekty będą odpowiedzialne za tworzenie m.in. zasobów w chmurze
 - `variable` - parametry wejścia, które pozwalają m.in. na wielokrotne użycie tego samego kodu oraz używanie własnych nazw zasobów
@@ -18,6 +22,7 @@ Terraform pozwala na tworzenie obiektów:
 - `provider` - trzyma informację o providerze, czyli dodatku pozwalającemu terraformowi komunikować się z np. z chmurą
 
 ### Polecenia konsoli
+
 Polecenie `terraform` pozwala na uruchomienie Terraforma w wierszu poleceń. W praktyce jest to całe środowisko pozwalające na sprawdzanie, tworzenie i zarządzanie zasobami (terraformowymi, nie cloudowymi).
 
 Przydatne polecenia na początek:
@@ -30,6 +35,7 @@ terraform destroy  # Usuwa zdefiniowane zasoby
 ```
 
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
+
 Nawiguj w przeglądarce do [portal.azure.com](https://portal.azure.com), uruchom "Cloud Shell" i wybierz `Bash`.
 
 Oficjalna dokumentacja: [Cloud Shell Quickstart](https://github.com/MicrosoftDocs/azure-docs/blob/main/articles/cloud-shell/quickstart.md).
@@ -41,9 +47,10 @@ git clone https://github.com/wguzik/tf-zadania.git
 > Poniższe kroki realizuje się za pomocą Cloud Shell.
 
 ### Krok 1 - Zainicjalizuj Terraform
-- nawiguj do katalogu z repozytorium i katalogu Lab01
+
+- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
   ```bash
-  cd tf-zadania/Lab01
+  cd tf-zadania/Lab-basics-01
   ```
 
 - zainicjalizuj Terraform

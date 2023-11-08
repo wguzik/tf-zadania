@@ -40,8 +40,8 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 W katalogu z plikami *.tf stwórz plik `terraform.tfvars` o treści:
 
-```
-project="<Twojenicjaly>
+```bash
+project="<Twojenicjaly>"
 environment="dev"
 location="westeurope"
 ```
@@ -58,4 +58,3 @@ terraform apply
 ```
 
 ### Krok 4 - Zweryfikuj ustawienia monitoringu
-
