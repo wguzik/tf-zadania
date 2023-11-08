@@ -26,7 +26,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 ### Krok 1 - Zainicjalizuj Terraform
 
-- nawiguj do katalogu z repozytorium i Lab04
+- nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Prometheus-Grafana`
   ```bash
   cd tf-zadania/Lab-AKS-Prometheus-Grafana
   ```
@@ -40,8 +40,8 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 W katalogu z plikami *.tf stwórz plik `terraform.tfvars` o treści:
 
-```
-project="<Twojenicjaly>
+```bash
+project="<Twojenicjaly>"
 environment="dev"
 location="westeurope"
 ```

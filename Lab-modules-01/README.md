@@ -4,7 +4,9 @@
 Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ## Wstęp
+
 ### Cel
+
 Podział projektu na moduły.
 
 Czas trwania: 45 minut
@@ -31,17 +33,17 @@ infrastructure/
 │  │  ├─ main.tf
 │  │  ├─ variables.tf
 │  │  ├─ outputs.tf
-│  │  ├─ provider.tf
+│  │  `- provider.tf
 │  ├─ vnet/
 │  │  ├─ main.tf
 │  │  ├─ variables.tf
 │  │  ├─ outputs.tf
-│  │  ├─ provider.tf
+│  │  `- provider.tf
 │  ├─ vm/
 │  │  ├─ main.tf
 │  │  ├─ variables.tf
 │  │  ├─ outputs.tf
-│  │  ├─ provider.tf
+│  │  `- provider.tf
 ```
 
 > Uwaga! To ćwiczenie polega w dużej mierze na rozwiązywaniu problemów. Ono z zasady nie działa od razu. Nie krępuj się zmieniać kod, próbować, psuć i naprawiać.
@@ -60,9 +62,9 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 ### Krok 1 - Zainicjalizuj Terraform
 
-- nawiguj do katalogu z repozytorium i Lab04
+- nawiguj do katalogu z repozytorium i katalogu `Lab-modules-01`
   ```bash
-  cd tf-zadania/Lab04
+  cd tf-zadania/Lab-modules-01
   ```
 
 - zainicjalizuj Terraform
@@ -72,10 +74,10 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 ### Krok 2 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` o treści:
+W katalogu z plikami `*.tf` stwórz plik `terraform.tfvars` o treści:
 
-```
-owner= "<Twojenicjaly>
+```bash
+owner= "<Twojenicjaly>"
 env= "dev"
 ```
 
@@ -107,12 +109,12 @@ Sprawdź zasoby w portalu, które powstały. Spróbuj ponowić - czy Terraform b
 
 Jaką tym razem napotkałeś/aś przeszkodę?
 
-Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów.
+Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów próbę wdrożenia.
 
 Okazuje się, że zdefiniowany obraz nie jest odpowiedni. Skąd wziąć właściwe informacje?
 
 Uruchom:
-```
+```bash
 az vm image list --all --publisher="Canonical" --sku="20_04-lts"
 ```
 
@@ -133,14 +135,15 @@ resource "azurerm_linux_virtual_machine" "tfvm01" {
 
 ### Krok 5 - Usuń zasoby
 
-```
+```bash
 terraform destroy
 ```
 
 ## Zadanie domowe
 
-Dodaj moduł do KeyVaulta i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane uprzednio, zapisywane do KeyVaulta i żeby maszyna pobierała je z niego.
+Dodaj moduł do tworzenia zasobu `KeyVault` i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane jako obiekt terraforma, zapisywane do KeyVaulta i żeby było ono pobierane właśnie z KeyVaulta.
 
 ## Zadanie domowe 2
 
 Dodaj drugi subnet i drugą maszynę wirtualną, która będzie go używać.
+Upewnij się, że maszyny mogą się pingować. Jaka usługa odpowiada za kontrolę ruchu na poziomie subnetu?
