@@ -51,7 +51,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
-### Krok 1 - utwórz właścwie pliki i zreorganizuj obiekty
+### Krok 1 - utwórz właściwe pliki i zreorganizuj obiekty
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-02`
 ```bash
