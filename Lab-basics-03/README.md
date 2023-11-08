@@ -146,6 +146,7 @@ terraform apply -var-file='envs/dev.tfvars'
 
 ```bash
 terraform init -reconfigure
+# działa bez parametru, ponieważ wartości są wpisane do pliku providers.tf
 ```
 
 ### Krok 11 - Usuń plik stanu ze Storage Account
