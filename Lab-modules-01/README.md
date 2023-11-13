@@ -1,4 +1,4 @@
-# Lab04 - Moduły
+# Lab - Wstęp do modułów
 
 ## Wymagania
 Aktywna subskrypcja w Azure i dostęp do portalu.
