@@ -2,7 +2,6 @@ provider "azurerm" {
   features {}
 }
 
-
 variable "prefix" {
   type    = string
   default = "wglabdev" # użyj własnego prefixu, sugeruję inicjały i np. 'lab'
@@ -19,49 +18,51 @@ resource "azurerm_resource_group" "example" {
 }
 
 module "network" {
-  vnet_name = module.naming.virtual_network.name
+  vnet_name           = module.naming.virtual_network.name
   source              = "Azure/network/azurerm"
   resource_group_name = azurerm_resource_group.example.name
-  address_spaces      = ["10.0.0.0/16", "10.2.0.0/16"]
-  subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  subnet_names        = ["subnet1", "subnet2", "subnet3"]
+  address_spaces      = ["10.52.0.0/16"]
+  subnet_prefixes     = ["10.52.0.0/24","10.52.1.0/24"]
+  subnet_names        = ["subnet1", "subnet2"]
 
   subnet_service_endpoints = {
-    "subnet1" : ["Microsoft.Sql"],
-    "subnet2" : ["Microsoft.Sql"],
-    "subnet3" : ["Microsoft.Sql"]
+    "subnet1" : ["Microsoft.Sql"]
   }
   use_for_each = true
   tags = {
     environment = "dev"
-    costcenter  = "it"
   }
 
   depends_on = [azurerm_resource_group.example]
 }
 
+locals {
+  nodes = {
+    for i in range(2) : "worker${i}" => {
+      name           = "worker${i}"
+      vm_size        = "Standard_D2s_v3"
+      node_count     = 1
+      vnet_subnet_id = module.network.vnet_subnets[0]
+    }
+  }
+}
+
 module "aks" {
-  source              = "Azure/aks/azurerm"
-  version             = "7.4.0"
-  prefix              = "wgkek"
-  resource_group_name = azurerm_resource_group.example.name
-  cluster_name        = module.naming.kubernetes_cluster.name
-  vnet_subnet_id      = module.network.vnet_subnets[0]
+  source  = "Azure/aks/azurerm"
+  version = "7.4.0"
+
+  prefix                        = var.prefix
+  resource_group_name           = azurerm_resource_group.example.name
+  os_disk_size_gb               = 60
+  public_network_access_enabled = false
+  sku_tier                      = "Free"
+  rbac_aad                      = false
+  vnet_subnet_id                = module.network.vnet_subnets[0]
+  node_pools                    = local.nodes
 
   log_analytics_workspace_enabled = false
 
-  rbac_aad = false
-
-  sku_tier = "Free"
-
-  node_pools = {
-    worker1 = {
-      name           = "pool"
-      vnet_subnet_id = module.network.vnet_subnets[0]
-      node_count     = 1
-      vm_size        = "Standard_D2s_v3"
-    }
-  }
-  
- depends_on = [azurerm_resource_group.example]
+  depends_on = [azurerm_resource_group.example,
+    module.network
+  ]
 }

@@ -60,13 +60,15 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 - stwórz plik `main.tf` i zapisz w nim zmienne:
 
-  ```hcl
+  ```bash
+  touch main.tf
+  ```
 
+  ```hcl
   variable "prefix" {
   type    = string
   default = "wglabdev" # użyj własnego prefixu, sugeruję inicjały i np. 'lab'
   }
-
   ```
 
 - zainicjalizuj terraform
@@ -93,6 +95,7 @@ git clone https://github.com/wguzik/tf-zadania.git
     location = "West Europe"
   }
   ```
+  
 - dostosuj przykład do scenariusza
 
   ```hcl
@@ -164,8 +167,30 @@ module "network" {
   }
   use_for_each = true
   tags = {
-    environment = "${var.environment}" # dev -> ${var.environment} tutaj dodaj odniesienie do zmiennej
+    environment = "dev" # dev
     costcenter  = "it"
+  }
+}
+```
+
+- usuń niepotrzebne zasoby i dostosuj kod
+
+```hcl
+module "network" {
+  vnet_name           = module.naming.virtual_network.name # dodaj nazwę z 'generatora'
+  source              = "Azure/network/azurerm"
+  resource_group_name = azurerm_resource_group.example.name
+  address_spaces      = ["10.52.0.0/16"] # użyj tylko jednego zakresu
+  subnet_prefixes     = ["10.52.0.0/24","10.52.1.0/24"] # użyj dwóch subnetów, upewnij się, że maski pasują do zakresu
+  subnet_names        = ["subnet1" ] #użyj dwóch subnetów,
+
+  subnet_service_endpoints = {
+    "subnet1" : ["Microsoft.Sql"] # pozostaw jeden subnet
+  }
+  use_for_each = true
+  tags = {
+    environment = "dev"
+    costcenter  = "it" # usuń tag
   }
 
   depends_on = [azurerm_resource_group.example] # upewnij się, że odnosisz się do właściwego zasobu
@@ -208,32 +233,36 @@ module "network" {
 > Użycie modułów wymaga podstawowej znajomości docelowego zasobu, niektóre ze zmiennych wejściowych mogą być nieoczywiste lub nieobsługiwane, co może spowodować konflikty.
 
 ```hcl
+locals { # zmienne lokalne 
+  nodes = {
+    for i in range(2) : "worker${i}" => { # pętla foreach, która pozwala tworzyć kilka zasobów
+      name           = "worker${i}"
+      vm_size        = "Standard_D2s_v3"
+      node_count     = 1
+      vnet_subnet_id = module.network.vnet_subnets[0] # użyj subnetu
+    }
+  }
+}
+
 module "aks" {
   source              = "Azure/aks/azurerm"
   version             = "7.4.0"
-  prefix              = "wgkek"
-  resource_group_name = azurerm_resource_group.example.name
-  cluster_name        = module.naming.kubernetes_cluster.name
-  vnet_subnet_id      = module.network.vnet_subnets[0]
 
-  log_analytics_workspace_enabled = false
+  prefix                        = "${var.prefix}"
+  resource_group_name           = azurerm_resource_group.example.name # użyj Resource Group
+  os_disk_size_gb               = 60
+  public_network_access_enabled = false
+  sku_tier                      = "Free" # Free pozwala oszczedzić kilka groszy, ale nie jest za darmo
+  rbac_aad                      = false
+  vnet_subnet_id                = module.network.vnet_subnets[0] # użyj subnetu
+  node_pools                    = local.nodes
 
-  rbac_aad = false
+  log_analytics_workspace_enabled = false #  nie twórz zasobów do logów (LAW)
 
-  sku_tier = "Free"
-
-  node_pools = {
-    worker1 = {
-      name           = "pool"
-      vnet_subnet_id = module.network.vnet_subnets[0]
-      node_count     = 1
-      vm_size        = "Standard_D2s_v3"
-    }
-  }
-  
- depends_on = [azurerm_resource_group.example]
+    depends_on = [ azurerm_resource_group.example,
+    module.network
+    ] # upewnij się, że AKS nie będzie tworzony zanim powstanie RG i VNet
 }
-
 ```
 
 - zainicjalizuj ponownie konfigurację (niezbędny krok po dodaniu modułu), uporządkuj kod i sprawdź efekt
@@ -245,11 +274,8 @@ module "aks" {
   terraform plan
   ```
 
-
 ## Usuń zasoby
 
 ```bash
 terraform destroy
 ```
-
-## Zadanie domowe
