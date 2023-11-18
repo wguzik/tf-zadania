@@ -8,16 +8,16 @@ resource "random_password" "password" {
 
 resource "azurerm_key_vault_secret" "tfvmsecret" {
   key_vault_id = var.kv_id
-  name = "pass-${var.environment}-${var.owner}-${var.postfix}"
-  value = random_password.password.result
+  name         = "pass-${var.environment}-${var.owner}-${var.postfix}"
+  value        = random_password.password.result
 }
 
-resource "azurerm_public_ip" "tfpip" {
-  name                = "pip01-${var.environment}-${var.owner}-${var.postfix}"
-  resource_group_name = data.azurerm_resource_group.tfrg.name
-  location            = data.azurerm_resource_group.tfrg.location
-  allocation_method   = "Dynamic"
-}
+//resource "azurerm_public_ip" "tfpip" {
+//  name                = "pip01-${var.environment}-${var.owner}-${var.postfix}"
+//  resource_group_name = data.azurerm_resource_group.tfrg.name
+//  location            = data.azurerm_resource_group.tfrg.location
+//  allocation_method   = "Dynamic"
+//}
 
 resource "azurerm_network_interface" "tfnic" {
   name                = "nic-${var.environment}-${var.owner}-${var.postfix}"
@@ -28,7 +28,7 @@ resource "azurerm_network_interface" "tfnic" {
     name                          = "internal"
     subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.tfpip.id
+    // public_ip_address_id          = azurerm_public_ip.tfpip.id
   }
 }
 
@@ -38,7 +38,7 @@ resource "azurerm_linux_virtual_machine" "tfvm" {
   location                        = data.azurerm_resource_group.tfrg.location
   size                            = "Standard_B2s"
   admin_username                  = "adminuser"
-  admin_password                  = random_password.password.value
+  admin_password                  = random_password.password.result
   disable_password_authentication = false
 
   custom_data = base64encode(file("modules/vm/scripts/init.sh"))

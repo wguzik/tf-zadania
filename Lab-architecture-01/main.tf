@@ -34,26 +34,26 @@ module "dns" {
 
 }
 
-//module "kv" {
-//  source = "./modules/kv"
-//
-//  rg_name = module.rg.rg_name
-//
-//  environment = var.environment
-//
-//  owner          = "wg"
-//  subnet_back_id = module.vnet.subnet_id_back
-//
-//  dns_name = module.dns.dns_kv_name
-//
-//  dns_id = module.dns.dns_kv_id
-//
-//  depends_on = [
-//    module.rg,
-//    module.vnet,
-//    module.module.dns
-//  ]
-//}
+module "kv" {
+  source = "./modules/kv"
+
+  rg_name = module.rg.rg_name
+
+  environment = var.environment
+
+  owner          = "wg"
+  subnet_back_id = module.vnet.subnet_id_back
+
+  dns_name = module.dns.dns_kv_name
+
+  dns_id = module.dns.dns_kv_id
+
+  depends_on = [
+    module.rg,
+    module.vnet,
+    module.dns
+  ]
+}
 
 
 module "vm1" {
@@ -65,6 +65,8 @@ module "vm1" {
   rg_name   = module.rg.rg_name
   subnet_id = module.vnet.subnet_id_back
   owner     = "wg"
+
+  kv_id = module.kv.kv_id
 
   depends_on = [
     module.vnet
@@ -103,6 +105,8 @@ module "sql1" {
   dns_name = module.dns.dns_sql_name
 
   dns_id = module.dns.dns_sql_id
+
+  kv_id = module.kv.kv_id
 
   owner = "wg"
 

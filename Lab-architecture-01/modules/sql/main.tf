@@ -8,8 +8,8 @@ resource "random_password" "password" {
 
 resource "azurerm_key_vault_secret" "tfsqsecret" {
   key_vault_id = var.kv_id
-  name = "pass-sql${var.environment}${var.owner}"
-  value = random_password.password.result
+  name         = "pass-sql${var.environment}${var.owner}"
+  value        = random_password.password.result
 }
 
 resource "azurerm_mssql_server" "tfsql" {
@@ -18,7 +18,7 @@ resource "azurerm_mssql_server" "tfsql" {
   location                     = data.azurerm_resource_group.tfrg.location
   version                      = "12.0"
   administrator_login          = "notregularuser"
-  administrator_login_password = random_password.password.value
+  administrator_login_password = random_password.password.result
   minimum_tls_version          = "1.2"
 
   public_network_access_enabled = false

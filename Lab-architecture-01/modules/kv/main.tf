@@ -39,7 +39,7 @@ resource "azurerm_private_endpoint" "tfkve" {
 
   private_service_connection {
     name                           = "kv-pc-${var.environment}-${var.owner}"
-    private_connection_resource_id = azurerm_mssql_server.tfsql.id
+    private_connection_resource_id = azurerm_key_vault.tfkv.id
     subresource_names              = ["vault"]
     is_manual_connection           = false
   }
