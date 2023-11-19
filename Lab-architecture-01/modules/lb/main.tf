@@ -17,8 +17,8 @@ resource "azurerm_lb_backend_address_pool" "tflbbackend" {
   name            = "vm-backend"
 }
 
-resource "azurerm_network_interface_backend_address_pool_association" "vm1association" {
-  network_interface_id    = var.vm1_nic
-  ip_configuration_name   = "internal"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.tflbbackend.id
-}
+//resource "azurerm_network_interface_backend_address_pool_association" "vm1association" {
+//  network_interface_id    = var.vm1_nic
+//  ip_configuration_name   = "internal"
+//  backend_address_pool_id = azurerm_lb_backend_address_pool.tflbbackend.id
+//}

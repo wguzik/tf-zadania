@@ -29,6 +29,7 @@ variable "postfix" {
 
 variable "lb_ip" {
   type = string
+  default = "10.0.0.2"
 }
 
 
