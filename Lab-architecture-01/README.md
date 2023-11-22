@@ -36,7 +36,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-modules-01`
   ```bash
-  cd tf-zadania/Lab-modules-01
+  cd tf-zadania/Lab-architecture-01
   ```
 
 - zainicjalizuj Terraform
@@ -44,7 +44,7 @@ git clone https://github.com/wguzik/tf-zadania.git
   terraform init
   ```
 
-### Krok 3 - Upewnij się, że kod jest poprawny
+### Krok 2 - Upewnij się, że kod jest poprawny
 
 ```bash
 terraform fmt
@@ -52,59 +52,14 @@ terraform validate
 terraform plan
 ```
 
-### Krok 3 - Zweryfikuj kod
+### Krok 3 - Dodawaj po kolei zasoby
 
-Znajdź fragmenty opisane zaczynające się od `##` i uzupełnij brakujący kod.
+W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei (najpierw `vnet`) i rób `apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
+Znajdz DNS zonę itd.
 
-Odkomentuj zaczytanie modułu `vm`.
+W przypadku modułu `webapp1` odkomentuj `lb_ip` dopiero po stworzeniu Load Balancera. Sprawdź kod w module i upewnij się, że będzie użyty. 
 
-### Krok 4 - Stwórz zasoby
+### Krok 4 - Dodaj nowe zasoby
 
-```bash
-terraform apply
-```
-
-Coś poszło nie tak?
-
-Sprawdź zasoby w portalu, które powstały. Spróbuj ponowić - czy Terraform będzie chciał zamienić wszystko?
-
-Jaką tym razem napotkałeś/aś przeszkodę?
-
-Zmień rozmiar maszyny na `Standard_B1ls` w kodzie i ponów próbę wdrożenia.
-
-Okazuje się, że zdefiniowany obraz nie jest odpowiedni. Skąd wziąć właściwe informacje?
-
-Uruchom:
-```bash
-az vm image list --all --publisher="Canonical" --sku="20_04-lts"
-```
-
-i w pliku [modules/vm/main.tf](Lab04\modules\vm\main.tf) umieść odpowiednie informacje:
-
-```hcl
-resource "azurerm_linux_virtual_machine" "tfvm01" {
-  ##
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-focal"
-    sku       = "20_04-lts-gen2"
-    version   = "20.04.202302070"
-  }
-}
-```
-
-### Krok 5 - Usuń zasoby
-
-```bash
-terraform destroy
-```
-
-## Zadanie domowe
-
-Dodaj moduł do tworzenia zasobu `KeyVault` i zapisz w nim hasło maszyny wirtualnej w taki sposób, żeby hasło było generowane jako obiekt terraforma, zapisywane do KeyVaulta i żeby było ono pobierane właśnie z KeyVaulta.
-
-## Zadanie domowe 2
-
-Dodaj drugi subnet i drugą maszynę wirtualną, która będzie go używać.
-Upewnij się, że maszyny mogą się pingować. Jaka usługa odpowiada za kontrolę ruchu na poziomie subnetu?
+Dodaj drugą maszynę wirtualną przez skopiowanie wywołania modułu `vm1` w pliku `main.tf`, zrób podobnie z `webapp1`.
+Czy bieżąca konfiguracja jest wystarczają, żeby Application Gateway i Load Balancer "załapały" nowe zasoby?
