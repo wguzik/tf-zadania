@@ -5,12 +5,16 @@
 ## Wymagania
 Aktywna subskrypcja w Azure i dostęp do portalu.
 
+Zainstalowany [helm](https://v2.helm.sh/docs/install/).
+
+Zainstalowany [kubectl](https://kubernetes.io/docs/tasks/tools/).
+
 ## Wstęp
+
 ### Cel
-Podział projektu na moduły.
+Instalacja standalone pakietu Prometheus i Grafana do zbierania i wizualizacji metryk w klastrze Kubernetes.
 
 Czas trwania: 45 minut
-
 
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
 
@@ -57,7 +61,7 @@ terraform plan
 terraform apply
 ```
 
-### Krok 4 - Skonfiguruj prometheus za pomocą helm chart
+### Krok 4 - Skonfiguruj Prometheus za pomocą helm chart
 
 Zaloguj się do AKS używając polecenia z terraform output:
 
@@ -77,7 +81,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 ```
 
-Zainstaluj prometheus i grafane:
+Zainstaluj Prometheus i Grafanę:
 
 ```bash
 helm install prometheus \
@@ -85,13 +89,24 @@ helm install prometheus \
   --namespace monitoring
 ```
 
-Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy (localhost:4000):
+Zrób forward usług na lokalną maszynę, użyj przeglądarki by przejrzeć metryki [localhost:4000](http://localhost:4000):
+
 ```bash
-kubectl port-forward svc/prometheus-grafana --namespace monitoring 4000:80
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus --namespace monitoring 4000:9090
+```
+
+Zrób forward usług na lokalną maszynę, użyj przeglądarki by przejrzeć alert manager [localhost:4001](http://localhost:4001):
+
+```bash
+kubectl port-forward svc/prometheus-kube-prometheus-alertmanager --namespace monitoring 4001:9093
+```
+
+
+Zrób forward usług na lokalną maszynę, użyj przeglądarki by przejrzeć wykresy [localhost:4002](http://localhost:40012):
+```bash
+kubectl port-forward svc/prometheus-grafana --namespace monitoring 4002:80
 //creds: admin/prom-operator
 ```
 
-```bash
-kubectl port-forward svc/prometheus-kube-prometheus-prometheus --namespace monitoring 4001:9090
-```
+
 
