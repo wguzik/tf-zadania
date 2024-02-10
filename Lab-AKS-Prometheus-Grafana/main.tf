@@ -1,7 +1,8 @@
 locals {
-  postfix = "${var.project}-${var.environment}-${var.location}"
+  postfix                       = "${var.project}-${var.environment}-${var.location}"
+  namespaces                    = ["monitoring", "nginx"]
+  kube_prometheus_stack_version = "56.6.2"
 }
-
 
 module "rg" {
   source = "./modules/rg"
@@ -23,7 +24,6 @@ module "vnet" {
   ]
 }
 
-
 module "aks_infra" {
   source = "./modules/aks_infra"
 
@@ -36,3 +36,26 @@ module "aks_infra" {
     module.vnet
   ]
 }
+
+##Sekcja-namespace
+#module "aks_config" {
+#  source = "./modules/aks_config"
+#
+#  namespaces = toset(local.namespaces)
+#
+#  rg_name =  module.rg.rg_name
+#
+#  depends_on = [ 
+#    module.aks_infra 
+#  ]
+#}
+
+##Sekcja-monitoring
+#module "kube-prometheus" {
+#  source = "./modules/kube-prometheus"
+#  stack_version = local.kube_prometheus_stack_version
+#
+#  depends_on = [ 
+#    module.aks_config
+#  ]
+#}

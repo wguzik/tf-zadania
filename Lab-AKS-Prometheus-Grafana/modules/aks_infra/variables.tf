@@ -1,6 +1,5 @@
 variable "rg_name" {
-  type    = string
-  default = "wg"
+  type = string
 }
 
 variable "postfix" {
