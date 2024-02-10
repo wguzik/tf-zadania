@@ -27,11 +27,13 @@ git clone https://github.com/wguzik/tf-zadania.git
 ### Krok 1 - Zainicjalizuj Terraform
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Prometheus-Grafana`
+
   ```bash
   cd tf-zadania/Lab-AKS-Prometheus-Grafana
   ```
 
 - zainicjalizuj Terraform
+
   ```bash
   terraform init
   ```
@@ -56,42 +58,56 @@ terraform validate
 terraform plan
 terraform apply
 ```
-
-### Krok 4 - Skonfiguruj prometheus za pomocą helm chart
+### Krok 4 - Skonfiguruj namespace
 
 Zaloguj się do AKS używając polecenia z terraform output:
 
 ```bash
+terraform output
 az aks get-credentials --name <clusterName> --resource-group <resourceGroupName>
 ```
 
-Dodaje namespace dla monitoringu:
+### Krok 5 - Stwórz namespace
+
+Zasoby w kubernetes powinny być podzielone według funkcji lub środowiska. Podstawowym rozwiązaniem są `namespace`.
+
+Odkomentuj `#Sekcja-namespace` w pliku `main.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
 
 ```bash
-kubectl create namespace monitoring
+terraform init
+
+terraform apply
 ```
 
-Dodaj helm repo:
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-```
+### Krok 6 - Wdróż kube-prometheus stack
 
-Zainstaluj prometheus i grafane:
+Prometheus, Grafana i AlertManager zazwyczaj chodzą w trio (albo większej grupie), dlatego dobrym pomysłem jest użyć helm chart, który dostarcza niezbędne komponenty i łączy je ze sobą.
 
-```bash
-helm install prometheus \
-  prometheus-community/kube-prometheus-stack \
-  --namespace monitoring
-```
-
-Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy (localhost:4000):
-```bash
-kubectl port-forward svc/prometheus-grafana --namespace monitoring 4000:80
-//creds: admin/prom-operator
-```
+Odkomentuj `#Sekcja-monitoring` w pliku `main.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
 
 ```bash
-kubectl port-forward svc/prometheus-kube-prometheus-prometheus --namespace monitoring 4001:9090
+terraform init
+
+terraform apply
 ```
 
+### Krok 7 - podejrzyj dostępne usługi
+
+Sprawdź dostępne services:
+
+```bash
+kubectl --namespace monitoring get svc
+```
+
+Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć podstawowe metryki [http://localhost:4000](http://localhost:4000):
+
+```bash
+kubectl --namespace monitoring port-forward svc/kube-prometheus-stack-prometheus 4000:9090
+```
+
+Zrób forward usług na lokalną maszynę użyj przeglądarki by przejrzeć wykresy [http://localhost:4001](http://localhost:4001):
+
+```bash
+kubectl --namespace monitoring port-forward svc/kube-prometheus-stack-grafana 4001:80
+#creds: admin/prom-operator
+```
