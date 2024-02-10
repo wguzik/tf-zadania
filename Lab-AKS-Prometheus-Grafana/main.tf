@@ -1,6 +1,6 @@
 locals {
-  postfix = "${var.project}-${var.environment}-${var.location}"
-  namespaces = ["monitoring","nginx"]
+  postfix                       = "${var.project}-${var.environment}-${var.location}"
+  namespaces                    = ["monitoring", "nginx"]
   kube_prometheus_stack_version = "56.6.2"
 }
 
@@ -56,6 +56,6 @@ module "aks_infra" {
 #  stack_version = local.kube_prometheus_stack_version
 #
 #  depends_on = [ 
-#    aks_config
-#   ]
+#    module.aks_config
+#  ]
 #}

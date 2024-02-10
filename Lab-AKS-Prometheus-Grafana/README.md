@@ -71,7 +71,7 @@ az aks get-credentials --name <clusterName> --resource-group <resourceGroupName>
 
 Zasoby w kubernetes powinny być podzielone według funkcji lub środowiska. Podstawowym rozwiązaniem są `namespace`.
 
-Odkomentuj `#Sekcja-namespace` w pliku `main.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
+Odkomentuj `#Sekcja-namespace` w pliku `main.tf` oraz w `providers.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
 
 ```bash
 terraform init
@@ -82,8 +82,9 @@ terraform apply
 ### Krok 6 - Wdróż kube-prometheus stack
 
 Prometheus, Grafana i AlertManager zazwyczaj chodzą w trio (albo większej grupie), dlatego dobrym pomysłem jest użyć helm chart, który dostarcza niezbędne komponenty i łączy je ze sobą.
+Wykorzystasz [https://prometheus-community.github.io/helm-charts](https://prometheus-community.github.io/helm-charts), wdroży wszystko co trzeba.
 
-Odkomentuj `#Sekcja-monitoring` w pliku `main.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
+Odkomentuj `#Sekcja-monitoring` w pliku `main.tf` oraz w `providers.tf`, a następnie zainicjalizuj ponownie terraform aby zaczytać nowy moduł i wdróż zmiany:
 
 ```bash
 terraform init

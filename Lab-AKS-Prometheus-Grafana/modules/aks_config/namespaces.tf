@@ -1,7 +1,7 @@
 resource "kubernetes_namespace" "namespace_monitoring" {
-    for_each = var.namespaces
+  for_each = var.namespaces
 
-    metadata {
-      name = each.value
-    }
+  metadata {
+    name = each.value
+  }
 }
