@@ -1,4 +1,4 @@
-# Lab03 - Aktualizacja providera
+# Lab-upgrade-provider - Aktualizacja providera
 
 ## Wymagania
 Aktywna subskrypcja w Azure i dostęp do portalu.
@@ -32,7 +32,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 - nawiguj do katalogu z repozytorium i Lab03
   ```bash
-  cd tf-zadania/Lab03
+  cd tf-zadania/Lab-upgrade-provider-01
   ```
 
 - zainicjalizuj Terraform
