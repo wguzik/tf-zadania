@@ -55,7 +55,7 @@ cd tf-zadania/Lab-basics-03/infra
 ```
 
 - uruchom edytor VS Code
-```
+```bash
 code .
 ```
 

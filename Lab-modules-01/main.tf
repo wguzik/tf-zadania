@@ -27,6 +27,4 @@ module "vnet" {
 #
 #  rg_name   = module.rg.rg_name
 #  subnet_id = module.vnet.subnet_id
-#
-#  ## Napisz zależność od modułu vnet od obiektu subnet_id
 #}

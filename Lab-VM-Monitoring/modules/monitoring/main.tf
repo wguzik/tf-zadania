@@ -7,6 +7,7 @@ resource "azurerm_log_analytics_workspace" "law" {
 }
 
 resource "azurerm_log_analytics_datasource_windows_performance_counter" "CPU_counter" {
+  # jest możliwość wykorzystania pętli for each dla wielu obiektów tego samego typu lecz różnych wartości
   name                = "CPU_Counter"
   resource_group_name = data.azurerm_resource_group.rg.name
   workspace_name      = azurerm_log_analytics_workspace.law.name

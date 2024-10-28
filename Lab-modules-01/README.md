@@ -135,7 +135,9 @@ resource "azurerm_linux_virtual_machine" "tfvm01" {
 
 ### Krok 5 - Stwórz kolejną maszynę wirtualną
 
-W pliku `main.tf` skopiuj wywołanie modułu "vm" (sekcję `module "vm"`)
+W pliku `main.tf` skopiuj wywołanie modułu "vm" (sekcję `module "vm"`), spróbuj wykonać `terraform plan` a następnie `terraform apply`.
+
+Zwróć uwagę na dodatkową zmienną - `id`, którą można wykorzystać.
 
 ### Krok -1 - Usuń zasoby
 

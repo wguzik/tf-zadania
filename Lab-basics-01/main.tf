@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm" # pozyskaj domyślnego repozytorium
-      version = "~>2.86.0" # użyj wersji wyższej niż 2.86.x, ale nie 2.87.x
+      version = "~>3.110.0" # użyj wersji wyższej niż 3.110.x, ale nie 3.111.x
     }
   }
 }
