@@ -7,7 +7,7 @@ Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ### Cel
 
-Podział projektu na moduły.
+Podział projektu na moduły i wielokrotne wykorzystanie.
 
 Czas trwania: 45 minut
 
@@ -133,7 +133,11 @@ resource "azurerm_linux_virtual_machine" "tfvm01" {
 }
 ```
 
-### Krok 5 - Usuń zasoby
+### Krok 5 - Stwórz kolejną maszynę wirtualną
+
+W pliku `main.tf` skopiuj wywołanie modułu "vm" (sekcję `module "vm"`)
+
+### Krok -1 - Usuń zasoby
 
 ```bash
 terraform destroy
