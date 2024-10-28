@@ -25,6 +25,7 @@ resource "azurerm_linux_virtual_machine" "tfvm" {
   size                = "Standard_B1"
   admin_username      = "adminuser"
   admin_password      = "p4ssVVd"
+  disable_password_authentication = false
   network_interface_ids = [
     azurerm_network_interface.tfnic.id,
   ]

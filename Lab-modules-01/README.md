@@ -77,8 +77,8 @@ git clone https://github.com/wguzik/tf-zadania.git
 W katalogu z plikami `*.tf` stwórz plik `terraform.tfvars` o treści:
 
 ```bash
-owner= "<Twojenicjaly>"
-env= "dev"
+owner="<Twojenicjaly>"
+env="dev"
 ```
 
 Terraform automatycznie zaczyta jego zawartość.
