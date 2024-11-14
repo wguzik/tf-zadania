@@ -14,7 +14,6 @@ resource "azurerm_subnet" "tfsub01-appgw" {
   resource_group_name                            = data.azurerm_resource_group.tfrg.name
   virtual_network_name                           = azurerm_virtual_network.tfvnet.name
   address_prefixes                               = ["10.0.0.0/24"]
-  enforce_private_link_endpoint_network_policies = true
   service_endpoints                              = ["Microsoft.Web"]
 }
 
@@ -23,7 +22,6 @@ resource "azurerm_subnet" "tfsub02-front" {
   resource_group_name                            = data.azurerm_resource_group.tfrg.name
   virtual_network_name                           = azurerm_virtual_network.tfvnet.name
   address_prefixes                               = ["10.0.1.0/24"]
-  enforce_private_link_endpoint_network_policies = true
 }
 
 resource "azurerm_subnet" "tfsub03-back" {

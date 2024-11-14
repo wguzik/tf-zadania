@@ -39,6 +39,14 @@ git clone https://github.com/wguzik/tf-zadania.git
   cd tf-zadania/Lab-architecture-01
   ```
 
+- skopiuj plik `terraform.tfvars.example` do `terraform.tfvars` i wypełnij odpowiednimi wartościami
+
+  ```bash
+  cp terraform.tfvars.example terraform.tfvars
+
+  code terraform.tfvars
+  ```
+
 - zainicjalizuj Terraform
   ```bash
   terraform init
@@ -63,3 +71,21 @@ W przypadku modułu `webapp1` odkomentuj `lb_ip` dopiero po stworzeniu Load Bala
 
 Dodaj drugą maszynę wirtualną przez skopiowanie wywołania modułu `vm1` w pliku `main.tf`, zrób podobnie z `webapp1`.
 Czy bieżąca konfiguracja jest wystarczają, żeby Application Gateway i Load Balancer "załapały" nowe zasoby?
+
+### Krok 5 - Skonfiguruj ręcznie backend pool w load balancerze
+
+[https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
+
+Jakie zmiany widzi terraform, a jakich nie?
+
+```bash
+terraform plan
+```
+
+Zaimportuj brakujące zasoby i dopisz konfigurację do pliku `modules/lb/main.tf`.
+
+### Krok -1 - Usuń zasoby
+
+```bash
+terraform destroy
+```

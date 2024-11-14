@@ -1,9 +1,9 @@
 resource "azurerm_lb" "tflb" {
-  name                = "lb-${var.environment}-${var.owner}"
+  name                = "lb-${var.environment}-${var.owner}1"
   resource_group_name = data.azurerm_resource_group.tfrg.name
   location            = data.azurerm_resource_group.tfrg.location
 
-  sku = "Basic"
+  sku = "Standard"
 
   frontend_ip_configuration {
     name      = "lb-fe-${var.environment}-${var.owner}"
