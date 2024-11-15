@@ -7,7 +7,7 @@ Aktywna subskrypcja w Azure i dostęp do portalu.
 
 ### Cel
 
-Podział projektu na moduły.
+Podział projektu na moduły i wielokrotne wykorzystanie.
 
 Czas trwania: 45 minut
 
@@ -77,8 +77,8 @@ git clone https://github.com/wguzik/tf-zadania.git
 W katalogu z plikami `*.tf` stwórz plik `terraform.tfvars` o treści:
 
 ```bash
-owner= "<Twojenicjaly>"
-env= "dev"
+owner="<Twojenicjaly>"
+env="dev"
 ```
 
 Terraform automatycznie zaczyta jego zawartość.
@@ -133,7 +133,13 @@ resource "azurerm_linux_virtual_machine" "tfvm01" {
 }
 ```
 
-### Krok 5 - Usuń zasoby
+### Krok 5 - Stwórz kolejną maszynę wirtualną
+
+W pliku `main.tf` skopiuj wywołanie modułu "vm" (sekcję `module "vm"`), spróbuj wykonać `terraform plan` a następnie `terraform apply`.
+
+Zwróć uwagę na dodatkową zmienną - `id`, którą można wykorzystać.
+
+### Krok -1 - Usuń zasoby
 
 ```bash
 terraform destroy

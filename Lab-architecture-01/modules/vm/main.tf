@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "tfpip" {
   name                = "pip01-${var.environment}-${var.owner}-${var.postfix}"
   resource_group_name = data.azurerm_resource_group.tfrg.name
   location            = data.azurerm_resource_group.tfrg.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 
 resource "azurerm_network_interface" "tfnic" {
@@ -57,5 +57,9 @@ resource "azurerm_linux_virtual_machine" "tfvm" {
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts-gen2"
     version   = "20.04.202209200"
+  }
+
+  lifecycle {
+    ignore_changes = [identity]
   }
 }

@@ -49,11 +49,13 @@ git clone https://github.com/wguzik/tf-zadania.git
 ### Krok 1 - Zainicjalizuj Terraform
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
+
   ```bash
   cd tf-zadania/Lab-basics-01
   ```
 
 - zainicjalizuj Terraform
+
   ```bash
   terraform init
   ```
@@ -68,7 +70,11 @@ terraform validate
 
 Skorzystaj z oficjalnej dokumentacji providera `Azure_RM` oraz zasobu typu `azurerm_resource_group`, żeby sprawdzić listę niezbędnych parametrów.
 
-Popraw błędy i ponów za pomocą wbudowanego edytora.
+Popraw błędy i ponów za pomocą wbudowanego edytora:
+
+```
+code .
+```
 
 ### Krok 3 - Uporządkuj kod
 
@@ -101,7 +107,7 @@ terraform apply -var="owner=<TwojeInicjaly>"
 
 ### Krok 6 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner= "<TwojeInicjaly>"`.
+W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner="<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
 

@@ -6,37 +6,37 @@ module "rg" {
   location    = var.location
 }
 
-//module "vnet" {
-//  source = "./modules/vnet"
-//
-//  owner       = var.owner
-//  environment = var.environment
-//  rg_name     = module.rg.rg_name
-//
-//  depends_on = [
-//    module.rg.rg_name
-//  ]
-//}
-//
+module "vnet" {
+  source = "./modules/vnet"
+
+  owner       = var.owner
+  environment = var.environment
+  rg_name     = module.rg.rg_name
+
+  depends_on = [
+    module.rg.rg_name
+  ]
+}
+
 //module "dns" {
 //  source = "./modules/dns"
 //
 //  rg_name     = module.rg.rg_name
 //  environment = var.environment
-//  owner       = "wg"
+//  owner       = var.owner
 //  vnet_id     = module.vnet.vnet_id
 //
 //  depends_on = [
 //    module.rg
 //  ]
 //}
-//
+
 //module "kv" {
 //  source = "./modules/kv"
 //
 //  rg_name        = module.rg.rg_name
 //  environment    = var.environment
-//  owner          = "wg"
+//  owner          = var.owner
 //  subnet_back_id = module.vnet.subnet_id_back
 //  dns_name       = module.dns.dns_kv_name
 //  dns_id         = module.dns.dns_kv_id
@@ -47,7 +47,7 @@ module "rg" {
 //    module.dns
 //  ]
 //}
-//
+
 //module "vm1" {
 //  source = "./modules/vm"
 //
@@ -56,7 +56,7 @@ module "rg" {
 //  postfix   = "1"
 //  rg_name   = module.rg.rg_name
 //  subnet_id = module.vnet.subnet_id_back
-//  owner     = "wg"
+//  owner     = var.owner
 //
 //  kv_id = module.kv.kv_id
 //
@@ -65,7 +65,7 @@ module "rg" {
 //    module.kv
 //  ]
 //}
-//
+
 //module "webapp1" {
 //  source = "./modules/webapp"
 //
@@ -74,17 +74,17 @@ module "rg" {
 //  rg_name           = module.rg.rg_name
 //  subnet_pe_id      = module.vnet.subnet_id_front
 //  subnet_webfarm_id = module.vnet.subnet_id_webfarm
-//  owner             = "wg"
+//  owner             = var.owner
 //  subnet_appgw_id   = module.vnet.subnet_id_appgw
 //
-//  //lb_ip = module.lb.lb_ip
+//  lb_ip = module.lb.lb_ip
 //
 //  depends_on = [
 //    module.vnet,
 //    module.dns
 //  ]
 //}
-//
+
 //module "sql1" {
 //  source = "./modules/sql"
 //
@@ -98,7 +98,7 @@ module "rg" {
 //  dns_id         = module.dns.dns_sql_id
 //  kv_id          = module.kv.kv_id
 //
-//  owner = "wg"
+//  owner = var.owner
 //
 //  depends_on = [
 //    module.vnet,
@@ -106,7 +106,23 @@ module "rg" {
 //    module.kv
 //  ]
 //}
+
+// stwórz Load Balancer ręcznie i zaimportuj stan do terraform
+//module "lb" {
+//  source = "./modules/lb"
 //
+//  rg_name        = module.rg.rg_name
+//  environment    = var.environment
+//  subnet_back_id = module.vnet.subnet_id_back
+//  owner          = var.owner
+//  vm1_nic        = module.vm1.vm_nic
+//
+//  depends_on = [
+//    module.rg,
+//    module.vm1
+//  ]
+//}
+
 //module "appgw" {
 //  source = "./modules/appgw"
 //
@@ -114,7 +130,7 @@ module "rg" {
 //
 //  environment     = var.environment
 //  subnet_appgw_id = module.vnet.subnet_id_appgw
-//  owner           = "wg"
+//  owner           = var.owner
 //
 //  webapp_fqdn = module.webapp1.webapp_fqdn
 //
@@ -125,16 +141,3 @@ module "rg" {
 //  ]
 //}
 //
-//module "lb" {
-//  source = "./modules/lb"
-//
-//  rg_name        = module.rg.rg_name
-//  environment    = var.environment
-//  subnet_back_id = module.vnet.subnet_id_back
-//  owner          = "wg"
-//  vm1_nic        = module.vm1.vm_nic
-//
-//  depends_on = [module.rg,
-//    module.vm1
-//  ]
-//}

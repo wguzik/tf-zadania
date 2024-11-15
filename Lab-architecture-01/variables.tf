@@ -10,5 +10,9 @@ variable "location" {
 
 variable "owner" {
   type    = string
-  default = "wg"
+  default = "you"
+}
+
+variable "subscription_id" {
+  type    = string
 }
