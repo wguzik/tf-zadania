@@ -3,7 +3,7 @@ resource "azurerm_service_plan" "tfsp" {
   resource_group_name = data.azurerm_resource_group.tfrg.name
   location            = data.azurerm_resource_group.tfrg.location
   os_type             = "Linux"
-  sku_name            = "S1" # "P0v3"
+  sku_name            = "P0v3"
 
   lifecycle {
     ignore_changes = [location]
