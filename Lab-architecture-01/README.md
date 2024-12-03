@@ -17,8 +17,8 @@ Czas trwania: 45 minut
 
 Architektura:
 - Frontend: dwie web appki, wymóg integracji z siecią
-- Backend: dwie maszyny wirtualne na linuxie, bez dostępu z publicznego internetu
-- Baza danych: MS SQL jako PaaS, zaintegrowany z siecią
+- Backend: dwie maszyny wirtualne na linuksie, bez dostępu z publicznego internetu
+- WIP: Baza danych: MS SQL jako PaaS, zaintegrowany z siecią
 
 ### Krok 0 - Uruchom Cloud Shell w Azure i sklonuj kod ćwiczeń
 
@@ -62,10 +62,8 @@ terraform plan
 
 ### Krok 3 - Dodawaj po kolei zasoby
 
-W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei (najpierw `vnet`) i rób `apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
+W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i rób `apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
 Znajdz DNS zonę itd.
-
-W przypadku modułu `webapp1` odkomentuj `lb_ip` dopiero po stworzeniu Load Balancera. Sprawdź kod w module i upewnij się, że będzie użyty. 
 
 ### Krok 4 - Dodaj nowe zasoby
 
@@ -74,18 +72,56 @@ Czy bieżąca konfiguracja jest wystarczają, żeby Application Gateway i Load B
 
 ### Krok 5 - Skonfiguruj ręcznie backend pool w load balancerze
 
-[https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
+Stwórz ręcznie load balancer:
+- internal (wewnętrzny)
+- w backend pool wybierz maszynę wirtualną
 
-Jakie zmiany widzi terraform, a jakich nie?
+Dokumentacja: [https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
+
+
+### Krok 7 - zweryfikuj sieć
+
+Przygotuj:
+- publiczny adres IP maszyny wirtualnej
+- prywatny adres IP maszyny wirtualnej
+- adres web appki
+
+Otwórz web appkę w przeglądarce i sprawdź, czy jest dostępna. Edytuj adres w pasku przeglądarki i dodaj `scm`, następnie wybierz shell.
+Jesteś w konsoli zarządzania web appki. Wpisz:
 
 ```bash
-terraform plan
+curl http://<publiczny-adres-ip-maszyny-wirtualnej>
 ```
 
-Zaimportuj brakujące zasoby i dopisz konfigurację do pliku `modules/lb/main.tf`.
+```bash
+curl http://<prywatny-adres-ip-maszyny-wirtualnej>
+```
+
+Adres prywatny nie powinien być osiągalny, poniewa Web Appka nie ma integracji z siecią lokalną.
+
+### Krok 8 - dodaj private endpoint
+
+W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #8 i zrób `apply`.
+
+Sprawdź w portalu, czy pojawił się private endpoint.
+
+### Krok 9 - zweryfikuj sieć
+
+```bash
+curl http://<publiczny-adres-ip-maszyny-wirtualnej>
+```
+
+```bash
+curl http://<prywatny-adres-ip-maszyny-wirtualnej>
+```
+
+Bonus:
+podłącz się do VMki po SSH i spróbuj wykonać ćwiczenie w drugą stronę - czy jest "prywatna" siec dla web app?
 
 ### Krok -1 - Usuń zasoby
 
 ```bash
 terraform destroy
 ```
+
+Uwaga! Load balancer trzeba usunąć ręcznie w portalu.

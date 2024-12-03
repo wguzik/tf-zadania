@@ -36,6 +36,7 @@ resource "azurerm_linux_web_app" "tfwebapp" {
   }
 }
 
+## Krok #8
 //resource "azurerm_private_endpoint" "tfwebappe" {
 //  name                = "app-pe-${var.environment}-${var.owner}-${var.postfix}"
 //  location            = data.azurerm_resource_group.tfrg.location
