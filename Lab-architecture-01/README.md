@@ -117,6 +117,8 @@ Wszystkie adresy są osiągalne, ponieważ Web Appka nie ma integracji z siecią
 
 W tym kroku dodajemy private endpoint do web appki. Obecnie web appka nie ma integracji z siecią lokalną na wejściu, czyli jeżeli są zasoby wewnątrz VNet bez dostępu do publicznego internetu, to nie mają dostępu do web appki.
 
+Upewnij się, czy web app jest dalej dostępna publicznie (poszukaj w dokumentacji).
+
 W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #7 i zrób `apply`.
 
 Sprawdź w portalu, czy pojawił się private endpoint.
