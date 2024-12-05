@@ -65,7 +65,7 @@ terraform plan
 W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i rób `apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
 Znajdz DNS zonę itd.
 
-### Krok 4 - Dodaj nowe zasoby
+### Krok 4 - Dodaj zasoby compute
 
 Dodaj drugą maszynę wirtualną przez skopiowanie wywołania modułu `vm1` w pliku `main.tf`, zrób podobnie z `webapp1`.
 Czy bieżąca konfiguracja jest wystarczają, żeby Application Gateway i Load Balancer "załapały" nowe zasoby?
@@ -79,7 +79,7 @@ Stwórz ręcznie load balancer:
 Dokumentacja: [https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
 
 
-### Krok 7 - zweryfikuj sieć
+### Krok 6 - zweryfikuj sieć
 
 Przygotuj:
 - publiczny adres IP maszyny wirtualnej
@@ -99,13 +99,13 @@ curl http://<prywatny-adres-ip-maszyny-wirtualnej>
 
 Adres prywatny nie powinien być osiągalny, poniewa Web Appka nie ma integracji z siecią lokalną.
 
-### Krok 8 - dodaj private endpoint
+### Krok 7 - dodaj private endpoint
 
 W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #8 i zrób `apply`.
 
 Sprawdź w portalu, czy pojawił się private endpoint.
 
-### Krok 9 - zweryfikuj sieć
+### Krok 8 - zweryfikuj sieć
 
 ```bash
 curl http://<publiczny-adres-ip-maszyny-wirtualnej>
@@ -124,4 +124,4 @@ podłącz się do VMki po SSH i spróbuj wykonać ćwiczenie w drugą stronę - 
 terraform destroy
 ```
 
-Uwaga! Load balancer trzeba usunąć ręcznie w portalu.
+> Uwaga! Load balancer trzeba usunąć ręcznie w portalu.

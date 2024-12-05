@@ -18,7 +18,7 @@ module "vnet" {
   ]
 }
 
-// #1
+// Krok #3
 //module "dns" {
 //  source = "./modules/dns"
 //
@@ -32,7 +32,7 @@ module "vnet" {
 //  ]
 //}
 
-// #1
+// Krok #3
 //module "kv" {
 //  source = "./modules/kv"
 //
