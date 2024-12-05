@@ -18,73 +18,73 @@ module "vnet" {
   ]
 }
 
-// Krok #3
-//module "dns" {
-//  source = "./modules/dns"
-//
-//  rg_name     = module.rg.rg_name
-//  environment = var.environment
-//  owner       = var.owner
-//  vnet_id     = module.vnet.vnet_id
-//
-//  depends_on = [
-//    module.rg
-//  ]
-//}
+## Krok #3
+#module "dns" {
+#  source = "./modules/dns"
+#
+#  rg_name     = module.rg.rg_name
+#  environment = var.environment
+#  owner       = var.owner
+#  vnet_id     = module.vnet.vnet_id
+#
+#  depends_on = [
+#    module.rg
+#  ]
+#}
 
-// Krok #3
-//module "kv" {
-//  source = "./modules/kv"
-//
-//  rg_name        = module.rg.rg_name
-//  environment    = var.environment
-//  owner          = var.owner
-//  subnet_back_id = module.vnet.subnet_id_back
-//  dns_name       = module.dns.dns_kv_name
-//  dns_id         = module.dns.dns_kv_id
-//
-//  depends_on = [
-//    module.rg,
-//    module.vnet,
-//    module.dns
-//  ]
-//}
+## Krok #3
+#module "kv" {
+#  source = "./modules/kv"
+#
+#  rg_name        = module.rg.rg_name
+#  environment    = var.environment
+#  owner          = var.owner
+#  subnet_back_id = module.vnet.subnet_id_back
+#  dns_name       = module.dns.dns_kv_name
+#  dns_id         = module.dns.dns_kv_id
+#
+#  depends_on = [
+#    module.rg,
+#    module.vnet,
+#    module.dns
+#  ]
+#}
 
-// Krok #4
-//module "vm1" {
-//  source = "./modules/vm"
-//
-//  environment = var.environment
-//
-//  postfix   = "1"
-//  rg_name   = module.rg.rg_name
-//  subnet_id = module.vnet.subnet_id_back
-//  owner     = var.owner
-//
-//  kv_id = module.kv.kv_id
-//
-//  depends_on = [
-//    module.vnet,
-//    module.kv
-//  ]
-//}
+## Krok #4
+#module "vm1" {
+#  source = "./modules/vm"
+#
+#  environment = var.environment
+#
+#  postfix   = "1"
+#  rg_name   = module.rg.rg_name
+#  subnet_id = module.vnet.subnet_id_back
+#  owner     = var.owner
+#
+#  kv_id = module.kv.kv_id
+#
+#  depends_on = [
+#    module.vnet,
+#    module.kv
+#  ]
+#}
 
-// # Krok #4
-//module "webapp1" {
-//  source = "./modules/webapp"
-//
-//  environment       = var.environment
-//  postfix           = "1"
-//  rg_name           = module.rg.rg_name
-//  subnet_pe_id      = module.vnet.subnet_id_front
-//  subnet_webfarm_id = module.vnet.subnet_id_webfarm
-//  owner             = var.owner
-//  subnet_appgw_id   = module.vnet.subnet_id_appgw
-//  depends_on = [
-//    module.vnet,
-//    module.dns
-//  ]
-//}
+## Krok #4
+#module "webapp1" {
+#  source = "./modules/webapp"
+#
+#  environment       = var.environment
+#  postfix           = "1"
+#  rg_name           = module.rg.rg_name
+#  subnet_pe_id      = module.vnet.subnet_id_front
+#  subnet_webfarm_id = module.vnet.subnet_id_webfarm
+#  owner             = var.owner
+#  subnet_appgw_id   = module.vnet.subnet_id_appgw
+#  depends_on = [
+#    module.vnet,
+#    module.dns
+#  ]
+#}
 
 # Krok #5 Stwórz ręcznie load balancer
 

@@ -39,12 +39,16 @@ git clone https://github.com/wguzik/tf-zadania.git
   cd tf-zadania/Lab-architecture-01
   ```
 
+- otwórz edytor
+
+  ```bash
+  code .
+  ```
+
 - skopiuj plik `terraform.tfvars.example` do `terraform.tfvars` i wypełnij odpowiednimi wartościami
 
   ```bash
   cp terraform.tfvars.example terraform.tfvars
-
-  code terraform.tfvars
   ```
 
 - zainicjalizuj Terraform
@@ -62,7 +66,7 @@ terraform plan
 
 ### Krok 3 - Dodawaj po kolei zasoby
 
-W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i rób `apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
+W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i rób `terraform init` i `terraform apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
 Znajdz DNS zonę itd.
 
 ### Krok 4 - Dodaj zasoby compute

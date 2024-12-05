@@ -38,16 +38,16 @@ resource "azurerm_linux_web_app" "tfwebapp" {
 }
 
 ## Krok #7
-//resource "azurerm_private_endpoint" "tfwebappe" {
-//  name                = "app-pe-${var.environment}-${var.owner}-${var.postfix}"
-//  location            = data.azurerm_resource_group.tfrg.location
-//  resource_group_name = data.azurerm_resource_group.tfrg.name
-//  subnet_id           = var.subnet_pe_id
-//
-//  private_service_connection {
-//    name                           = "app-pc-${var.environment}-${var.owner}-${var.postfix}"
-//    private_connection_resource_id = azurerm_linux_web_app.tfwebapp.id
-//    subresource_names              = ["sites"]
-//    is_manual_connection           = false
-//  }
-//}
+#resource "azurerm_private_endpoint" "tfwebappe" {
+#  name                = "app-pe-${var.environment}-${var.owner}-${var.postfix}"
+#  location            = data.azurerm_resource_group.tfrg.location
+#  resource_group_name = data.azurerm_resource_group.tfrg.name
+#  subnet_id           = var.subnet_pe_id
+#
+#  private_service_connection {
+#    name                           = "app-pc-${var.environment}-${var.owner}-${var.postfix}"
+#    private_connection_resource_id = azurerm_linux_web_app.tfwebapp.id
+#    subresource_names              = ["sites"]
+#    is_manual_connection           = false
+#  }
+#}
