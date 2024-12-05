@@ -3,6 +3,6 @@
 #}
 
 output "webapp_url" {
-  value = module.webapp.webapp_url
+  value = module.webapp1.webapp_url
 }
 

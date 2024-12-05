@@ -89,6 +89,7 @@ Przygotuj:
 - publiczny adres IP maszyny wirtualnej
 - prywatny adres IP maszyny wirtualnej
 - adres web appki
+- adres prywatny load balancera
 
 Otwórz web appkę w przeglądarce i sprawdź, czy jest dostępna. Edytuj adres w pasku przeglądarki i dodaj `scm`, następnie wybierz shell.
 
@@ -106,26 +107,33 @@ curl http://<publiczny-adres-ip-maszyny-wirtualnej>
 curl http://<prywatny-adres-ip-maszyny-wirtualnej>
 ```
 
-Adres prywatny nie powinien być osiągalny, ponieważ Web Appka nie ma integracji z siecią lokalną.
+```bash
+curl http://<prywatny-adres-ip-load-balancera>
+```
 
-### Krok 7 - dodaj private endpoint
+Wszystkie adresy są osiągalne, ponieważ Web Appka nie ma integracji z siecią lokalną.
+
+### Krok 7 - dodaj private endpoint do web appki - OPCJONALNIE
+
+W tym kroku dodajemy private endpoint do web appki. Obecnie web appka nie ma integracji z siecią lokalną na wejściu, czyli jeżeli są zasoby wewnątrz VNet bez dostępu do publicznego internetu, to nie mają dostępu do web appki.
 
 W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #7 i zrób `apply`.
 
 Sprawdź w portalu, czy pojawił się private endpoint.
 
-### Krok 8 - zweryfikuj sieć
+### Krok 8 - zweryfikuj sieć z VMki - OPCJONALNIE
+
+Podłącz się do VMki po SSH i spróbuj wykonać ćwiczenie w drugą stronę - czy jest "prywatna" siec dla web app?
+
 
 ```bash
-curl http://<publiczny-adres-ip-maszyny-wirtualnej>
+nslookup <adres-web-appki>
 ```
 
 ```bash
-curl http://<prywatny-adres-ip-maszyny-wirtualnej>
+curl https://<adres-web-appki>
 ```
 
-Bonus:
-podłącz się do VMki po SSH i spróbuj wykonać ćwiczenie w drugą stronę - czy jest "prywatna" siec dla web app?
 
 ### Krok -1 - Usuń zasoby
 
