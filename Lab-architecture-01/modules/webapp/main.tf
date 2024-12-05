@@ -27,16 +27,17 @@ resource "azurerm_linux_web_app" "tfwebapp" {
     }
   }
 
-  app_settings = {
-    backend_IP = var.lb_ip
-  }
+  // Zignoruj tę sekcję
+  //app_settings = {
+  //  backend_IP = var.lb_ip
+  //}
 
   lifecycle {
     ignore_changes = [location]
   }
 }
 
-## Krok #8
+## Krok #7
 //resource "azurerm_private_endpoint" "tfwebappe" {
 //  name                = "app-pe-${var.environment}-${var.owner}-${var.postfix}"
 //  location            = data.azurerm_resource_group.tfrg.location

@@ -87,7 +87,12 @@ Przygotuj:
 - adres web appki
 
 Otwórz web appkę w przeglądarce i sprawdź, czy jest dostępna. Edytuj adres w pasku przeglądarki i dodaj `scm`, następnie wybierz shell.
-Jesteś w konsoli zarządzania web appki. Wpisz:
+
+```bash 
+# https://app-dev-gw-1.azurewebsites.net -> https://app-dev-gw-1.scm.azurewebsites.net
+```
+
+W konsoli (nazywa się Kudu) zarządzania web appki. Wpisz:
 
 ```bash
 curl http://<publiczny-adres-ip-maszyny-wirtualnej>
@@ -97,11 +102,11 @@ curl http://<publiczny-adres-ip-maszyny-wirtualnej>
 curl http://<prywatny-adres-ip-maszyny-wirtualnej>
 ```
 
-Adres prywatny nie powinien być osiągalny, poniewa Web Appka nie ma integracji z siecią lokalną.
+Adres prywatny nie powinien być osiągalny, ponieważ Web Appka nie ma integracji z siecią lokalną.
 
 ### Krok 7 - dodaj private endpoint
 
-W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #8 i zrób `apply`.
+W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #7 i zrób `apply`.
 
 Sprawdź w portalu, czy pojawił się private endpoint.
 
