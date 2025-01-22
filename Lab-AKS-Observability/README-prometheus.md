@@ -46,9 +46,9 @@ spec:
     spec:
       containers:
       - name: cpu-loader
-        image: prom/prometheus:latest  # Używamy obrazu Prometheusa, który już ma eksporter metryk
+        image: prom/prometheus:latest  # Obraz aplikacji, który posiada eksporter metryk
         command: ["/bin/sh"]
-        args: ["-c", "while true; do echo 'Generowanie obciążenia CPU...'; dd if=/dev/zero of=/dev/null bs=1M count=1000; done"]
+        args: ["-c", "while true; do echo 'Lets burn some CPU...'; dd if=/dev/zero of=/dev/null bs=1M count=1000; done"]
         ports:
         - containerPort: 9090
           name: metrics
@@ -121,10 +121,6 @@ Podstawowy typ danych w Prometheus. Składa się z:
 - **Histogram** - Zlicza obserwacje w przedziałach (np. czasy odpowiedzi)
   - Przykład: `http_request_duration_seconds`
   - Dostarcza dodatkowe metryki: `_bucket`, `_sum`, `_count`
-
-- **Summary** - Podobny do histogramu, ale oblicza percentyle po stronie klienta
-  - Przykład: `http_request_duration_seconds`
-  - Dostarcza metryki: `_sum`, `_count`
 
 ## Podstawowe funkcje PromQL
 

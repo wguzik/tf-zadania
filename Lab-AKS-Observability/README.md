@@ -219,9 +219,9 @@ kubectl get pods -n monitoring -l app.kubernetes.io/name=fluent-bit
 kubectl get pods -n monitoring -l app.kubernetes.io/name=fluentd
 ```
 
-Po poprawnej instalacji, logi będą automatycznie zbierane i przesyłane do Elasticsearch. Możesz je przeglądać w Kibanie, tworząc index pattern dla 'fluent-*'. 
+Po poprawnej instalacji, logi będą automatycznie zbierane i przesyłane do Elasticsearch. Możesz je przeglądać w Kibanie, tworząc index pattern dla `'fluent-*`'. 
 
-### Krok 11 - Fluentd Operator
+### Krok 11 - Fluentd i Fluentd 
 
 > ! NIE DZIAŁA !
 
@@ -250,10 +250,10 @@ Aby sprawdzić konfigurację Fluentd:
 kubectl get fluentdconfig cluster-logging -n logging -o yaml
 ```
 
-Po instalacji, index pattern 'fluentd-*' zostanie automatycznie utworzony w Kibanie. Aby wyświetlić logi:
+Po instalacji, index pattern `fluentd-*` zostanie automatycznie utworzony w Kibanie. Aby wyświetlić logi:
 
 1. Zaloguj się do Kibany
-2. Stwórz index pattern 'fluentd-*'
+2. Stwórz index pattern'`fluentd-*`
    
 ```bash
 # Uzyskaj dostęp do Kibany przez port-forward
@@ -270,6 +270,12 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 4. Możesz teraz przeglądać i filtrować logi z klastra
 
 ### Krok 12 - Dodawanie alertów do Prometheusa
+
+Aby przetestować alert na zużycie CPU, możesz uruchomić pod który będzie generował obciążenie:
+
+[README-prometheus.md](README-prometheus.md)
+
+Odkomentuj zawartość pliku `modules/kube-prometheus/service_monitor.tf`.
 
 Odkomentuj `#Sekcja-alerty` w pliku `main.tf`:
 
@@ -306,10 +312,6 @@ kubectl port-forward -n metrics svc/kube-prometheus-stack-prometheus 4000:9090
 
 Otwórz w przeglądarce [http://localhost:4000](http://localhost:4000) i przejdź do zakładki "Alerts".
 
-Aby przetestować alert na zużycie CPU, możesz uruchomić pod który będzie generował obciążenie:
-
-[README-prometheus.md](README-prometheus.md)
-
-Po kilku minutach powinieneś zobaczyć alert w AlertManagerze. Aby zatrzymać test:
+Po kilku minutach powinieneś zobaczyć alert w AlertManagerze.
 
 Krok, który nie został wykonany to wysłanie alertu na email/Slack/Teams. To wymaga dodatkowej integracji.
