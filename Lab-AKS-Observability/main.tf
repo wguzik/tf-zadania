@@ -1,9 +1,3 @@
-locals {
-  postfix                       = "${var.project}-${var.environment}-${var.location}"
-  namespaces                    = ["monitoring", "nginx"]
-  kube_prometheus_stack_version = "56.6.2"
-}
-
 module "rg" {
   source = "./modules/rg"
 
@@ -43,19 +37,52 @@ module "aks_infra" {
 #
 #  namespaces = toset(local.namespaces)
 #
-#  rg_name =  module.rg.rg_name
+#  rg_name = module.rg.rg_name
 #
-#  depends_on = [ 
-#    module.aks_infra 
+#  depends_on = [
+#    module.aks_infra
 #  ]
 #}
 
-##Sekcja-monitoring
+##Sekcja-metryki
 #module "kube-prometheus" {
-#  source = "./modules/kube-prometheus"
+#  source        = "./modules/kube-prometheus"
 #  stack_version = local.kube_prometheus_stack_version
 #
-#  depends_on = [ 
+#  depends_on = [
 #    module.aks_config
 #  ]
+#}
+
+##Sekcja-logging-elasticsearch
+#module "elasticsearch" {
+#  source = "./modules/elasticsearch"
+#  
+#  elasticsearch_version = local.elasticsearch_version
+#  kibana_version       = local.kibana_version
+#  
+#  depends_on = [
+#    module.aks_config
+#  ]
+#}
+
+##Sekcja-logging
+#module "logging" {
+#  source = "./modules/logging"
+#  
+#  fluent_bit_version = local.fluent_bit_version
+#  fluentd_version    = local.fluentd_version
+#  environment        = var.environment
+#  
+#  depends_on = [
+#    module.elasticsearch
+#  ]
+#}
+
+##Sekcja-alerty
+#module "prometheus_alerts" {
+#  source = "./modules/prometheus-alerts"
+#  
+#  rule_name = "custom-alerts"
+#  namespace = "metrics"
 #}

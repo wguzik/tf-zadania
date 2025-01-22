@@ -1,6 +1,6 @@
 variable "namespace" {
   type    = string
-  default = "monitoring"
+  default = "metrics"
 }
 
 variable "stack_version" {
