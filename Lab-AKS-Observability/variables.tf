@@ -24,5 +24,5 @@ variable "location" {
     )
     error_message = "Location is not: westeurope or northeurope."
   }
-  default = "westeurope"
+  default = "northeurope"
 }

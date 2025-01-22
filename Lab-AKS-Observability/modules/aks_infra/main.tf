@@ -37,6 +37,12 @@ resource "azurerm_kubernetes_cluster" "aks" {
   //  environment = var.environment
   //  team        = var.team_name
   //}
+
+  lifecycle {
+    ignore_changes = [
+      default_node_pool
+    ]
+  }
 }
 
 // resource "azurerm_kubernetes_cluster_node_pool" "appworkload" {

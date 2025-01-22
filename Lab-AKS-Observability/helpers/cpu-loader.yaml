@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: app1-cpu
+  labels:
+    name: app1-cpu
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-loader
+  namespace: app1-cpu
+  labels:
+    app: cpu-loader
+    monitoring: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cpu-loader
+  template:
+    metadata:
+      labels:
+        app: cpu-loader
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: cpu-loader
+        image: prom/prometheus:latest  # Używamy obrazu Prometheusa, który już ma eksporter metryk
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do echo 'Generowanie obciążenia CPU...'; dd if=/dev/zero of=/dev/null bs=1M count=1000; done"]
+        ports:
+        - containerPort: 9090
+          name: metrics
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "64Mi"
+          limits:
+            cpu: "500m"
+            memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cpu-loader
+  namespace: app1-cpu
+  labels:
+    app: cpu-loader
+spec:
+  ports:
+  - port: 9090
+    targetPort: metrics
+    name: metrics
+  selector:
+    app: cpu-loader
