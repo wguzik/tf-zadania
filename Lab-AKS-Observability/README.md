@@ -201,27 +201,7 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 
 Wybierz "Try sample data" - > "Sample web logs".
 
-### Krok 10 - Logi z FluentBit i Fluentd
-
-Odkomentuj `#Sekcja-logging` w pliku `main.tf` oraz zaktualizuj repozytoria helm:
-
-```bash
-helm repo add fluent https://fluent.github.io/helm-charts
-helm repo update
-terraform init
-terraform apply
-```
-
-Sprawdź status podów:
-
-```bash
-kubectl get pods -n monitoring -l app.kubernetes.io/name=fluent-bit
-kubectl get pods -n monitoring -l app.kubernetes.io/name=fluentd
-```
-
-Po poprawnej instalacji, logi będą automatycznie zbierane i przesyłane do Elasticsearch. Możesz je przeglądać w Kibanie, tworząc index pattern dla `'fluent-*`'. 
-
-### Krok 11 - Fluentd i Fluentd 
+### Krok 10 - Logi z Fluentd i Fluentd 
 
 > ! NIE DZIAŁA !
 
@@ -269,7 +249,7 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 3. Wybierz odpowiedni zakres czasowy w prawym górnym rogu
 4. Możesz teraz przeglądać i filtrować logi z klastra
 
-### Krok 12 - Dodawanie alertów do Prometheusa
+### Krok 11 - Dodawanie alertów do Prometheusa
 
 Aby przetestować alert na zużycie CPU, możesz uruchomić pod który będzie generował obciążenie:
 
