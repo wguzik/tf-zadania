@@ -26,3 +26,8 @@ variable "location" {
   }
   default = "northeurope"
 }
+
+
+variable "subscription_id" {
+  type=string
+}

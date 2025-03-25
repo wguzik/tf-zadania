@@ -26,18 +26,12 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 Podstawowym narzędziem do edycji kodu jest wbudowany w `VS Code` w Cloud Shell, który można uruchomić za pomocą polecenia `code`.
 
-### Krok 1 - Zainicjalizuj Terraform
+### Krok 1 - Nawiguj do katalogu z projektem
 
-- nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Observability  `
+- nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Observability`
 
   ```bash
   cd tf-zadania/Lab-AKS-Observability
-  ```
-
-- zainicjalizuj Terraform
-
-  ```bash
-  terraform init
   ```
 
 ### Krok 2 - Ukryj zmienne w pliku
@@ -46,6 +40,13 @@ Podstawowym narzędziem do edycji kodu jest wbudowany w `VS Code` w Cloud Shell,
 
 ```bash
 cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
 ```
 
 - następnie zmień zawartość:
@@ -57,6 +58,12 @@ location="westeurope"
 ```
 
 Terraform automatycznie zaczyta jego zawartość.
+
+- zainicjalizuj Terraform
+
+  ```bash
+  terraform init
+  ```
 
 ### Krok 3 - Upewnij się, że kod jest poprawny i stwórz infrastrukturę
 
