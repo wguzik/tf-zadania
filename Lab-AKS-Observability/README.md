@@ -30,9 +30,9 @@ Podstawowym narzędziem do edycji kodu jest wbudowany w `VS Code` w Cloud Shell,
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Observability`
 
-  ```bash
-  cd tf-zadania/Lab-AKS-Observability
-  ```
+```bash
+cd tf-zadania/Lab-AKS-Observability
+```
 
 ### Krok 2 - Ukryj zmienne w pliku
 
@@ -61,9 +61,9 @@ Terraform automatycznie zaczyta jego zawartość.
 
 - zainicjalizuj Terraform
 
-  ```bash
-  terraform init
-  ```
+```bash
+terraform init
+```
 
 ### Krok 3 - Upewnij się, że kod jest poprawny i stwórz infrastrukturę
 
