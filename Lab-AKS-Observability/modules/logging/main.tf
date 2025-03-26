@@ -25,8 +25,8 @@ resource "helm_release" "fluentd" {
 
   values = [
     templatefile("${path.module}/values/fluentd-values.yaml", {
-      environment          = var.environment
-      elasticsearch_user   = var.elasticsearch_user
+      environment            = var.environment
+      elasticsearch_user     = var.elasticsearch_user
       elasticsearch_password = var.elasticsearch_password
     })
   ]

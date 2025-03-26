@@ -25,7 +25,7 @@ variable "fluentd_service_name" {
 
 variable "elasticsearch_user" {
   description = "Username for Elasticsearch authentication"
-  default       = "elastic"
+  default     = "elastic"
   type        = string
 }
 
