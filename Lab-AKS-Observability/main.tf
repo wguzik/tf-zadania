@@ -54,6 +54,15 @@ module "aks_infra" {
 #  ]
 #}
 
+
+##Sekcja-alerty
+#module "prometheus_alerts" {
+#  source = "./modules/prometheus-alerts"
+#  
+#  rule_name = "custom-alerts"
+#  namespace = "metrics"
+#}
+
 ##Sekcja-logging-elasticsearch
 #module "elasticsearch" {
 #  source = "./modules/elasticsearch"
@@ -77,12 +86,4 @@ module "aks_infra" {
 #  depends_on = [
 #    module.elasticsearch
 #  ]
-#}
-
-##Sekcja-alerty
-#module "prometheus_alerts" {
-#  source = "./modules/prometheus-alerts"
-#  
-#  rule_name = "custom-alerts"
-#  namespace = "metrics"
 #}

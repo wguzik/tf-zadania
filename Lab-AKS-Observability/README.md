@@ -26,19 +26,13 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 Podstawowym narzędziem do edycji kodu jest wbudowany w `VS Code` w Cloud Shell, który można uruchomić za pomocą polecenia `code`.
 
-### Krok 1 - Zainicjalizuj Terraform
+### Krok 1 - Nawiguj do katalogu z projektem
 
-- nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Observability  `
+- nawiguj do katalogu z repozytorium i katalogu `Lab-AKS-Observability`
 
-  ```bash
-  cd tf-zadania/Lab-AKS-Observability
-  ```
-
-- zainicjalizuj Terraform
-
-  ```bash
-  terraform init
-  ```
+```bash
+cd tf-zadania/Lab-AKS-Observability
+```
 
 ### Krok 2 - Ukryj zmienne w pliku
 
@@ -46,6 +40,13 @@ Podstawowym narzędziem do edycji kodu jest wbudowany w `VS Code` w Cloud Shell,
 
 ```bash
 cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
 ```
 
 - następnie zmień zawartość:
@@ -57,6 +58,12 @@ location="westeurope"
 ```
 
 Terraform automatycznie zaczyta jego zawartość.
+
+- zainicjalizuj Terraform
+
+```bash
+terraform init
+```
 
 ### Krok 3 - Upewnij się, że kod jest poprawny i stwórz infrastrukturę
 
@@ -177,7 +184,54 @@ Rozwiązanie w tej formie jest bardzo niebezpieczne, ponieważ nie posiada włą
 
 W związku z tym w takich przypadkach korzysta się zazwyczaj z funkcjonalności ingress, której omówienie wykracza poza to ćwiczenie.
 
-### Krok 9 - Składowanie logów z ElasticSearch
+### Krok 9 - Dodawanie alertów do Prometheusa
+
+Aby przetestować alert na zużycie CPU, możesz uruchomić pod który będzie generował obciążenie:
+
+[README-prometheus.md](README-prometheus.md)
+
+Odkomentuj zawartość pliku `modules/kube-prometheus/service_monitor.tf`.
+
+Odkomentuj `#Sekcja-alerty` w pliku `main.tf`:
+
+```bash
+terraform init
+terraform apply
+```
+
+Po wdrożeniu, zostały utworzone następujące alerty:
+- `ContainerHighCPUUsage` - alert gdy kontener zużywa ponad 80% CPU przez 5 minut
+- `NodeHighCPUUsage` - alert gdy node zużywa ponad 80% CPU przez 5 minut
+- `HighMemoryUsage` - alert gdy zużycie pamięci na node przekracza 80% przez 5 minut
+
+Możesz sprawdzić skonfigurowane reguły alertów:
+
+```bash
+kubectl get prometheusrules -n metrics
+kubectl describe prometheusrule custom-alerts -n metrics
+```
+
+Aby zobaczyć aktywne alerty, przejdź do interfejsu AlertManagera:
+
+```bash
+kubectl port-forward -n metrics svc/kube-prometheus-stack-alertmanager 4002:9093
+```
+
+Otwórz w przeglądarce [http://localhost:4002](http://localhost:4002) i przejdź do zakładki "Alerts".
+
+Możesz również zobaczyć status alertów w Prometheusie:
+
+```bash
+kubectl port-forward -n metrics svc/kube-prometheus-stack-prometheus 4000:9090
+```
+
+Otwórz w przeglądarce [http://localhost:4000](http://localhost:4000) i przejdź do zakładki "Alerts".
+
+Po kilku minutach powinieneś zobaczyć alert w AlertManagerze.
+
+Krok, który nie został wykonany to wysłanie alertu na email/Slack/Teams. To wymaga dodatkowej integracji.
+
+### Krok 10 - Składowanie logów z ElasticSearch
 
 Jest wiele sposobów na zbieranie logów z kubernetes. Wykorzystasz Fluentd, Fluentbit do zbierania logów oraz oraz lokalną instancję Elasticsearch do ich przechowywania.
 
@@ -201,7 +255,7 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 
 Wybierz "Try sample data" - > "Sample web logs".
 
-### Krok 10 - Logi z Fluentd i Fluentd 
+### Krok 11 - Logi z Fluentd i Fluentd 
 
 > ! NIE DZIAŁA !
 
@@ -249,49 +303,10 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 3. Wybierz odpowiedni zakres czasowy w prawym górnym rogu
 4. Możesz teraz przeglądać i filtrować logi z klastra
 
-### Krok 11 - Dodawanie alertów do Prometheusa
+### Krok -1
 
-Aby przetestować alert na zużycie CPU, możesz uruchomić pod który będzie generował obciążenie:
-
-[README-prometheus.md](README-prometheus.md)
-
-Odkomentuj zawartość pliku `modules/kube-prometheus/service_monitor.tf`.
-
-Odkomentuj `#Sekcja-alerty` w pliku `main.tf`:
+Pamiętaj aby usunąć zasoby!
 
 ```bash
-terraform init
-terraform apply
+terraform destroy
 ```
-
-Po wdrożeniu, zostały utworzone następujące alerty:
-- `ContainerHighCPUUsage` - alert gdy kontener zużywa ponad 80% CPU przez 5 minut
-- `NodeHighCPUUsage` - alert gdy node zużywa ponad 80% CPU przez 5 minut
-- `HighMemoryUsage` - alert gdy zużycie pamięci na node przekracza 80% przez 5 minut
-
-Możesz sprawdzić skonfigurowane reguły alertów:
-
-```bash
-kubectl get prometheusrules -n metrics
-kubectl describe prometheusrule custom-alerts -n metrics
-```
-
-Aby zobaczyć aktywne alerty, przejdź do interfejsu AlertManagera:
-
-```bash
-kubectl port-forward -n metrics svc/kube-prometheus-stack-alertmanager 4002:9093
-```
-
-Otwórz w przeglądarce [http://localhost:4002](http://localhost:4002) i przejdź do zakładki "Alerts".
-
-Możesz również zobaczyć status alertów w Prometheusie:
-
-```bash
-kubectl port-forward -n metrics svc/kube-prometheus-stack-prometheus 4000:9090
-```
-
-Otwórz w przeglądarce [http://localhost:4000](http://localhost:4000) i przejdź do zakładki "Alerts".
-
-Po kilku minutach powinieneś zobaczyć alert w AlertManagerze.
-
-Krok, który nie został wykonany to wysłanie alertu na email/Slack/Teams. To wymaga dodatkowej integracji.
