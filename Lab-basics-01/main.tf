@@ -26,6 +26,10 @@ variable "owner" {
   type =  string
 }
 
+variable "subscription_id" {
+  type=string
+}
+
 locals {
   # Tworzenie całych nazw uprzednio nie jest dobrą praktyką, późniejsze zarządzanie zasobami jest utrudnione
 resourcegroup_name = "rg-${var.environment}-${var.owner}"
