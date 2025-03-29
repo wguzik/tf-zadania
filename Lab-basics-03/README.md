@@ -105,6 +105,8 @@ SANAME=<storageAccountName>
 az storage blob list --account-name $SANAME --container-name dev -o table
 ```
 
+> Czy to na pewno rozważne trzymać obydwa stany na jedenym Storage Accouncie?
+
 ### Krok 3 - Ukryj zmienne w pliku
 
 W katalogu z plikami *.tf zweryfikuj zawartość `envs/dev.tfvars` i upewnij się, że dane są właście: inicjały i nazwa środowiska.
