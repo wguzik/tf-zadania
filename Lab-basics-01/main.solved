@@ -11,6 +11,8 @@ terraform {
 # Dodatkowa konfiguracja providera, np. można wskazać konto serwisowe którego powinien używać terraform to interakcji z chmurą lub domyślną subskrypcję
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
 }
 
 # Zmienna wejściowa pozwalająca na przekazanie nazwy środowiska
@@ -24,10 +26,14 @@ variable "owner" {
   type = string
 }
 
+variable "subscription_id" {
+  type=string
+}
+
 locals {
   # Tworzenie całych nazw uprzednio nie jest dobrą praktyką, późniejsze zarządzanie zasobami jest utrudnione
   resourcegroup_name  = "rg-${var.environment}-${var.owner}"
-  storageaccount_name = "sa${var.environment}${var.owner}"
+  storageaccount_name = replace("sa-${var.environment}-${var.owner}","-","")
 }
 
 # Stwórz Resource Group

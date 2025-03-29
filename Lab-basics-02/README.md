@@ -56,7 +56,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
 
 ```bash
-cd tf-zadania/Lab-basics-01
+cd tf-zadania/Lab-basics-02
 ```
 
 - w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
@@ -91,10 +91,9 @@ terraform plan
 
 ### Krok 4 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner="<TwojeInicjaly>"`.
+W pliku `terraform.tfvars` dopisz zmienną `owner="<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
-
 
 ### Krok 5 - Stwórz zasoby
 
