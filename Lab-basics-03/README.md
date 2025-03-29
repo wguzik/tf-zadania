@@ -43,7 +43,7 @@ git clone https://github.com/wguzik/tf-zadania.git
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
 
 ```bash
-cd tf-zadania/Lab-basics-03
+cd tf-zadania/Lab-basics-03/infra
 ```
 
 - w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
