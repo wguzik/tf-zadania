@@ -38,12 +38,21 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
-### Krok 1 - podaj subskrypcję jako zmienną
+### Krok 1 - utwórz dedykowaną Resource Group i Storage Account na potrzeby backendu
+
+- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03` i uruchom skryp do tworzenia podstawowych zasobów
+```bash
+cd ~/tf-zadania/Lab-basics-03/scripts
+chmod +x createInfra.sh
+./createInfra.sh
+```
+
+### Krok 2 - Skonfiguruj backend
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
 
 ```bash
-cd tf-zadania/Lab-basics-03/infra
+cd ~/tf-zadania/Lab-basics-03/infra
 ```
 
 - w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
@@ -57,22 +66,6 @@ cp terraform.tfvars.example terraform.tfvars
 ```bash
 subscription_id=$(az account show --query="id")
 sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
-```
-
-### Krok 1 - utwórz dedykowaną Resource Group i Storage Account na potrzeby backendu
-
-- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03` i uruchom skryp do tworzenia podstawowych zasobów
-```bash
-cd tf-zadania/Lab-basics-03/scripts
-chmod +x createInfra.sh
-./createInfra.sh
-```
-
-### Krok 2 - Skonfiguruj backend
-
-- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03`
-```bash
-cd tf-zadania/Lab-basics-03/infra
 ```
 
 - uruchom edytor VS Code
