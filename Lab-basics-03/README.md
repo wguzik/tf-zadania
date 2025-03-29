@@ -69,6 +69,7 @@ sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
 ```
 
 - uruchom edytor VS Code
+- 
 ```bash
 code .
 ```
