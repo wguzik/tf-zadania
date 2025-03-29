@@ -101,6 +101,7 @@ terraform init
 
 ```bash
 # opcjonalnie skorzytaj z wiersza poleceń
+SANAME=<storageAccountName>
 az storage blob list --account-name $SANAME --container-name dev -o table
 ```
 
@@ -109,6 +110,10 @@ az storage blob list --account-name $SANAME --container-name dev -o table
 W katalogu z plikami *.tf zweryfikuj zawartość `envs/dev.tfvars` i upewnij się, że dane są właście: inicjały i nazwa środowiska.
 
 ### Krok 4 - Zweryfikuj poprawność kodu i utwórz zasoby
+
+- skopiuj wartość zmiennej `subscription_id` z `terraform.tfvars` do plików:
+  - `~/tf-zadania/Lab-basics-03/infra/envs/dev.tfvars`
+  - `~/tf-zadania/Lab-basics-03/infra/envs/prod.tfvars`
 
 ```bash
 terraform fmt -recursive
@@ -176,7 +181,7 @@ terraform init -reconfigure
 terraform plan
 ```
 
-### Krok 12 - Usuń zasoby
+### Krok -1 - Usuń zasoby
 
 - terraform
 

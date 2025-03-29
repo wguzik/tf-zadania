@@ -1,4 +1,3 @@
 subscription_id=YourSubscriptionID
-project="mr"
 environment="dev"
 location="northeurope"
