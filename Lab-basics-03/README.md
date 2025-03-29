@@ -42,19 +42,34 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03` i uruchom skryp do tworzenia podstawowych zasobów
 ```bash
-cd tf-zadania/Lab-basics-03/scripts
+cd ~/tf-zadania/Lab-basics-03/scripts
 chmod +x createInfra.sh
 ./createInfra.sh
 ```
 
 ### Krok 2 - Skonfiguruj backend
 
-- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-03`
+- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
+
 ```bash
-cd tf-zadania/Lab-basics-03/infra
+cd ~/tf-zadania/Lab-basics-03/infra
+```
+
+- w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
 ```
 
 - uruchom edytor VS Code
+- 
 ```bash
 code .
 ```
@@ -86,14 +101,21 @@ terraform init
 
 ```bash
 # opcjonalnie skorzytaj z wiersza poleceń
+SANAME=<storageAccountName>
 az storage blob list --account-name $SANAME --container-name dev -o table
 ```
+
+> Czy to na pewno rozważne trzymać obydwa stany na jedenym Storage Accouncie?
 
 ### Krok 3 - Ukryj zmienne w pliku
 
 W katalogu z plikami *.tf zweryfikuj zawartość `envs/dev.tfvars` i upewnij się, że dane są właście: inicjały i nazwa środowiska.
 
 ### Krok 4 - Zweryfikuj poprawność kodu i utwórz zasoby
+
+- skopiuj wartość zmiennej `subscription_id` z `terraform.tfvars` do plików:
+  - `~/tf-zadania/Lab-basics-03/infra/envs/dev.tfvars`
+  - `~/tf-zadania/Lab-basics-03/infra/envs/prod.tfvars`
 
 ```bash
 terraform fmt -recursive
@@ -161,7 +183,7 @@ terraform init -reconfigure
 terraform plan
 ```
 
-### Krok 12 - Usuń zasoby
+### Krok -1 - Usuń zasoby
 
 - terraform
 

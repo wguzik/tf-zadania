@@ -35,26 +35,35 @@ git clone https://github.com/wguzik/tf-zadania.git
 ### Krok 1 - Zainicjalizuj Terraform
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-modules-01`
-  ```bash
-  cd tf-zadania/Lab-architecture-01
-  ```
+
+```bash
+cd tf-zadania/Lab-architecture-01
+```
 
 - otwórz edytor
 
-  ```bash
-  code .
-  ```
+```bash
+code .
+```
 
-- skopiuj plik `terraform.tfvars.example` do `terraform.tfvars` i wypełnij odpowiednimi wartościami
+- w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
 
-  ```bash
-  cp terraform.tfvars.example terraform.tfvars
-  ```
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
+```
 
 - zainicjalizuj Terraform
-  ```bash
-  terraform init
-  ```
+
+```bash
+terraform init
+```
 
 ### Krok 2 - Upewnij się, że kod jest poprawny
 
@@ -66,7 +75,7 @@ terraform plan
 
 ### Krok 3 - Dodawaj po kolei zasoby
 
-W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i rób `terraform init` i `terraform apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany Private Enpoint/Private Link.
+W pliku `main.tf` odkomentowuj bloki z modułami rozmaitych zasobów po kolei i wykonuj `terraform init` i `terraform apply` za każdą zmianą. Obserwuj zmiany w portalu i zidentifikuj wdrożone ustawienia, np. znajdź gdzie jest skonfigurowany `Private Enpoint`.
 Znajdz DNS zonę itd.
 
 ### Krok 4 - Dodaj zasoby compute
@@ -81,7 +90,6 @@ Stwórz ręcznie load balancer:
 - w backend pool wybierz maszynę wirtualną
 
 Dokumentacja: [https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
-
 
 ### Krok 6 - zweryfikuj sieć
 

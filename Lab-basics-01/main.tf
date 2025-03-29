@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm" # pozyskaj domyślnego repozytorium
-      version = "~>3.110.0" # użyj wersji wyższej niż 3.110.x, ale nie 3.111.x
+      version = "~>4.24.0" # jakie to ograniczenie wersji?
     }
   }
 }
@@ -11,6 +11,8 @@ terraform {
 # Dodatkowa konfiguracja providera, np. można wskazać konto serwisowe którego powinien używać terraform to interakcji z chmurą lub domyślną subskrypcję
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
 }
 
 # Zmienna wejściowa pozwalająca na przekazanie nazwy środowiska
@@ -22,6 +24,10 @@ variable "environment" {
 # Zmienna wejściowa pozwalająca na przekazanie inicjałów właściciela zasobu
 variable "owner" {
   type =  string
+}
+
+variable "subscription_id" {
+  type=string
 }
 
 locals {
