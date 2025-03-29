@@ -2,14 +2,17 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.110.0" # użyj dokładnie tej wersji providera
+      version = "4.24.0" # użyj dokładnie tej wersji providera
     }
   }
 }
 
 provider "azurerm" {
   features {}
+
+  subscription_id = var.subscription_id
 }
+
 
 data "azurerm_client_config" "current" {} # pozwala pobrać detale bieżącej sesji, m.in. tenant ID
 
@@ -20,6 +23,10 @@ variable "environment" {
 
 variable "owner" {
   type = string
+}
+
+variable "subscription_id" {
+  
 }
 
 resource "azurerm_resource_group" "tfrg" {

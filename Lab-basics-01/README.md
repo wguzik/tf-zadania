@@ -46,23 +46,38 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell.
 
-### Krok 1 - Zainicjalizuj Terraform
+### Krok 1 - podaj subskrypcję jako zmienną
 
 - nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
 
-  ```bash
-  cd tf-zadania/Lab-basics-01
-  ```
+```bash
+cd tf-zadania/Lab-basics-01
+```
+
+- w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
+```
+
+### Krok 2 - Zainicjalizuj Terraform
 
 - zainicjalizuj Terraform
 
-  ```bash
-  terraform init
-  ```
+```bash
+terraform init
+```
 
 Jakie informacje pojawiły się na ekranie?
 
-### Krok 2 - Zweryfikuj poprawność kodu
+### Krok 3 - Zweryfikuj poprawność kodu
 
 ```bash
 terraform validate
@@ -76,13 +91,13 @@ Popraw błędy i ponów za pomocą wbudowanego edytora:
 code .
 ```
 
-### Krok 3 - Uporządkuj kod
+### Krok 4 - Uporządkuj kod
 
 ```bash
 terraform fmt
 ```
 
-### Krok 4 - Zaplanuj stworzenie zasobów
+### Krok 5 - Zaplanuj stworzenie zasobów
 
 ```bash
 terraform plan
@@ -148,11 +163,11 @@ W Portalu Azure znajdź Storage Account, którzy utworzyłeś/aś i usuń go rę
 Uruchom `terraform plan`, aby zweryfikować propozycję zmian, następnie odtwórz zasób.
 
 
-### Krok 8 - Usuń zasoby
+### Krok -1 - Usuń zasoby
 
 ```
 terraform destroy
 ```
 
-## Zadanie domowe
+## Zadanie dodatkowe
 Dodaj więcej do zmiennej `environment` ograniczenie dotyczące możliwych wartości, np 'dev', 'test', 'prod'.

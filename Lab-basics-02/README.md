@@ -51,12 +51,28 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
-### Krok 1 - utwórz właściwe pliki i zreorganizuj obiekty
+### Krok 1 - podaj subskrypcję jako zmienną
 
-- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-02`
+- nawiguj do katalogu z repozytorium i katalogu `Lab-basics-01`
+
 ```bash
-cd tf-zadania/Lab-basics-02
+cd tf-zadania/Lab-basics-01
 ```
+
+- w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
+```
+
+### Krok 2 - utwórz właściwe pliki i zreorganizuj obiekty
 
 - utwórz pliki i przenieś odpowiednie bloki to odpowiednich plików
 ```bash
@@ -65,7 +81,7 @@ touch versions.tf
 touch outputs.tf
 ```
 
-### Krok 2 - Zweryfikuj poprawność kodu
+### Krok 3 - Zweryfikuj poprawność kodu
 
 ```bash
 terraform fmt
@@ -73,22 +89,27 @@ terraform validate
 terraform plan
 ```
 
-### Krok 3 - Ukryj zmienne w pliku
+### Krok 4 - Ukryj zmienne w pliku
 
 W katalogu z plikami *.tf stwórz plik `terraform.tfvars` i umieść w nim `owner="<TwojeInicjaly>"`.
 
 Terraform automatycznie zaczyta jego zawartość.
 
 
-### Krok 4 - Stwórz zasoby
+### Krok 5 - Stwórz zasoby
 
 ```bash
 terraform apply
 ```
 
-### Krok 5 - Podejrzyj hasło w KeyVault w portalu
+### Krok 6 - Podejrzyj hasło w KeyVault w portalu
 
-### Krok 6 - Podejrzyj plik stanu
+Lub za pomocą cloud shell:
+
+```bash
+az keyvault secret show --name <secretName> --vault-name <vaultName>
+
+### Krok 7 - Podejrzyj plik stanu
 
 ```bash
 ls -a
@@ -99,13 +120,13 @@ Przejrzyj uważnie plik i poszukaj frazy `result`, porównaj wartość z tą, kt
 
 Plik stanu w Terraformie przechowuje wiele informacji, w tym hasła w postaci zwykłego tekstu. Plik stanu jest kluczowy nie tylko ze względu na terraform jako taki, ale również przez fakt, że są w nim Twoje hasła.
 
-### Krok 8 - Usuń zasoby
+### Krok -1 - Usuń zasoby
 
 ```
 terraform destroy
 ```
 
-## Zadanie domowe
+## Zadanie dodatkowe
 
 Stwórz Storage Account ręcznie, a następnie zaimportuj go do stanu.
 > Podpowiedź: warto wcześniej napisać w terraformie. `terraform plan` Twoim przyjacielem.
