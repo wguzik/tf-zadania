@@ -14,5 +14,5 @@ variable "owner" {
 }
 
 variable "subscription_id" {
-  type    = string
+  type = string
 }
