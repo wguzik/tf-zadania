@@ -127,22 +127,3 @@ module "vnet" {
 ////  ]
 ////}
 //
-//// #4 skip
-////module "appgw" {
-////  source = "./modules/appgw"
-////
-////  rg_name = module.rg.rg_name
-////
-////  environment     = var.environment
-////  subnet_appgw_id = module.vnet.subnet_id_appgw
-////  owner           = var.owner
-////
-////  webapp_fqdn = module.webapp1.webapp_fqdn
-////
-////  depends_on = [
-////    module.rg,
-////    module.vnet,
-////    module.webapp1
-////  ]
-////}
-////

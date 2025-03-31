@@ -13,7 +13,11 @@ Czas trwania: 45 minut
 
 ## Multitier
 
-`Multitier` albo `n-tier` to podział infrastruktury według funkcji, który pozwala na lepszą separację zasobów i odpowiednie stosowanie zarówno zasad skalowania jak i bezpieczeństwa.
+`Multitier` albo `n-tier` to podział infrastruktury według:
+- funkcji
+- zasad skalowania
+- dostępów
+- ...
 
 Architektura:
 - Frontend: dwie web appki, wymóg integracji z siecią
@@ -40,12 +44,6 @@ git clone https://github.com/wguzik/tf-zadania.git
 cd tf-zadania/Lab-architecture-01
 ```
 
-- otwórz edytor
-
-```bash
-code .
-```
-
 - w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
 
 ```bash
@@ -57,6 +55,18 @@ cp terraform.tfvars.example terraform.tfvars
 ```bash
 subscription_id=$(az account show --query="id")
 sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
+```
+
+- otwórz edytor
+
+```bash
+code .
+```
+
+i zamień wartość `owner` na np. swój inicjał:
+
+```bash
+owner = "wg"
 ```
 
 - zainicjalizuj Terraform
@@ -81,13 +91,17 @@ Znajdz DNS zonę itd.
 ### Krok 4 - Dodaj zasoby compute
 
 Dodaj drugą maszynę wirtualną przez skopiowanie wywołania modułu `vm1` w pliku `main.tf`, zrób podobnie z `webapp1`.
-Czy bieżąca konfiguracja jest wystarczają, żeby Application Gateway i Load Balancer "załapały" nowe zasoby?
+Jak dostać się do zasobów?
 
 ### Krok 5 - Skonfiguruj ręcznie backend pool w load balancerze
 
 Stwórz ręcznie load balancer:
 - internal (wewnętrzny)
 - w backend pool wybierz maszynę wirtualną
+
+Upewnij się, że masz skonfigurowane:
+- load balcing rules
+- health probe
 
 Dokumentacja: [https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer](https://learn.microsoft.com/en-us/azure/load-balancer/quickstart-load-balancer-standard-public-portal#create-load-balancer)
 
@@ -119,9 +133,13 @@ curl http://<prywatny-adres-ip-maszyny-wirtualnej>
 curl http://<prywatny-adres-ip-load-balancera>
 ```
 
-Wszystkie adresy są osiągalne, ponieważ Web Appka nie ma integracji z siecią lokalną.
+Wszystkie adresy są osiągalne, ponieważ Web Appka posiada integrację z siecią lokalną "na wyjściu".
 
-### Krok 7 - dodaj private endpoint do web appki - OPCJONALNIE
+```bash
+nslookup http://<adres keyvaulta>
+```
+
+### Krok 7 - dodaj private endpoint do web appki
 
 W tym kroku dodajemy private endpoint do web appki. Obecnie web appka nie ma integracji z siecią lokalną na wejściu, czyli jeżeli są zasoby wewnątrz VNet bez dostępu do publicznego internetu, to nie mają dostępu do web appki.
 
@@ -131,10 +149,9 @@ W pliku `modules/webapp/main.tf` odkomentuj sekcję opisaną Krok #7 i zrób `ap
 
 Sprawdź w portalu, czy pojawił się private endpoint.
 
-### Krok 8 - zweryfikuj sieć z VMki - OPCJONALNIE
+### Krok 8 - zweryfikuj sieć z VMki
 
 Podłącz się do VMki po SSH i spróbuj wykonać ćwiczenie w drugą stronę - czy jest "prywatna" siec dla web app?
-
 
 ```bash
 nslookup <adres-web-appki>
@@ -144,6 +161,11 @@ nslookup <adres-web-appki>
 curl https://<adres-web-appki>
 ```
 
+### Krok 9 - Wpis DNS dla maszyny wirtualnej
+
+Spróbuj wykorzystać bieżącą konfigurację.
+
+Zobacz jak można to zrobić: [https://learn.microsoft.com/en-us/azure/dns/dns-private-zone-terraform?tabs=azure-cli](https://learn.microsoft.com/en-us/azure/dns/dns-private-zone-terraform?tabs=azure-cli).
 
 ### Krok -1 - Usuń zasoby
 
