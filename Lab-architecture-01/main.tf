@@ -1,7 +1,7 @@
 module "rg" {
   source = "./modules/rg"
 
-  owner       = var.owner 
+  owner       = var.owner
   environment = var.environment
   location    = var.location
 }
