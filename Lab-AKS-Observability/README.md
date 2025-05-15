@@ -303,7 +303,7 @@ kubectl port-forward -n logging svc/kibana-kibana 5601:5601
 3. Wybierz odpowiedni zakres czasowy w prawym górnym rogu
 4. Możesz teraz przeglądać i filtrować logi z klastra
 
-### Krok -1
+### Krok 12
 
 Pamiętaj aby usunąć zasoby!
 
