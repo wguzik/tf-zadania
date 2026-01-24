@@ -1,0 +1,4 @@
+project="mr"
+environment="dev"
+location="westeurope"
+subscription_id=YourSubscriptionID

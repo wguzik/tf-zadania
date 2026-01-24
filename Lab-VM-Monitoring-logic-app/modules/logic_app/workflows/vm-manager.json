@@ -1,0 +1,165 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "triggers": {
+    "When_Azure_Monitor_alert_is_received": {
+      "type": "Request",
+      "kind": "Http",
+      "inputs": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "schemaId": {
+              "type": "string"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "essentials": {
+                  "type": "object",
+                  "properties": {
+                    "alertId": {
+                      "type": "string"
+                    },
+                    "alertRule": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string"
+                    },
+                    "signalType": {
+                      "type": "string"
+                    },
+                    "monitorCondition": {
+                      "type": "string"
+                    },
+                    "monitoringService": {
+                      "type": "string"
+                    },
+                    "alertTargetIDs": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "firedDateTime": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "alertContext": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "actions": {
+    "Parse_Alert_JSON": {
+      "runAfter": {},
+      "type": "ParseJson",
+      "inputs": {
+        "content": "@triggerBody()",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "schemaId": {
+              "type": "string"
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "essentials": {
+                  "type": "object",
+                  "properties": {
+                    "alertTargetIDs": {
+                      "type": "array"
+                    },
+                    "monitorCondition": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Check_if_alert_is_fired": {
+      "runAfter": {
+        "Parse_Alert_JSON": [
+          "Succeeded"
+        ]
+      },
+      "type": "If",
+      "expression": {
+        "and": [
+          {
+            "equals": [
+              "@body('Parse_Alert_JSON')?['data']?['essentials']?['monitorCondition']",
+              "Fired"
+            ]
+          }
+        ]
+      },
+      "actions": {
+        "For_each_target_resource": {
+          "foreach": "@body('Parse_Alert_JSON')?['data']?['essentials']?['alertTargetIDs']",
+          "actions": {
+            "Parse_Resource_ID": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": {
+                "resourceId": "@items('For_each_target_resource')",
+                "subscriptionId": "@split(items('For_each_target_resource'), '/')[2]",
+                "resourceGroup": "@split(items('For_each_target_resource'), '/')[4]",
+                "vmName": "@split(items('For_each_target_resource'), '/')[8]"
+              }
+            },
+            "Stop_VM": {
+              "runAfter": {
+                "Parse_Resource_ID": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "https://management.azure.com@{items('For_each_target_resource')}/powerOff?api-version=2023-03-01",
+                "authentication": {
+                  "type": "ManagedServiceIdentity",
+                  "audience": "https://management.azure.com"
+                }
+              }
+            },
+            "Log_VM_Stop_Action": {
+              "runAfter": {
+                "Stop_VM": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "message": "VM stopped successfully",
+                "vmName": "@outputs('Parse_Resource_ID')?['vmName']",
+                "timestamp": "@utcNow()",
+                "alertId": "@body('Parse_Alert_JSON')?['data']?['essentials']?['alertId']"
+              }
+            }
+          },
+          "runAfter": {},
+          "type": "Foreach"
+        }
+      }
+    }
+  },
+  "outputs": {}
+  },
+  "parameters": {}
+}

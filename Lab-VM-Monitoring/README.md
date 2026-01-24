@@ -24,21 +24,30 @@ git clone https://github.com/wguzik/tf-zadania.git
 
 > Poniższe kroki realizuje się za pomocą Cloud Shell
 
-### Krok 1 - Zainicjalizuj Terraform
+### Krok 1 - Nawiguj do katalogu z projektem
 
-- nawiguj do katalogu z repozytorium i Lab04
-  ```bash
-  cd tf-zadania/Lab-VM-Monitoring
-  ```
+- nawiguj do katalogu z repozytorium i katalogu `Lab-VM-Monitoring`
 
-- zainicjalizuj Terraform
-  ```bash
-  terraform init
-  ```
+```bash
+cd tf-zadania/Lab-VM-Monitoring
+```
 
 ### Krok 2 - Ukryj zmienne w pliku
 
-W katalogu z plikami *.tf stwórz plik `terraform.tfvars` o treści:
+- w katalogu z plikami `*.tf` stwórz plik przez skopiowanie `terraform.tfvars.example` i zmianę nazwy na `terraform.tfvars`,
+
+```bash
+cp terraform.tfvars.example terraform.tfvars
+```
+
+- podaj subskrypcję
+
+```bash
+subscription_id=$(az account show --query="id")
+sed -i "s/YourSubscriptionID/$subscription_id/g" terraform.tfvars
+```
+
+- następnie zmień zawartość:
 
 ```bash
 project="<Twojenicjaly>"
@@ -47,6 +56,12 @@ location="westeurope"
 ```
 
 Terraform automatycznie zaczyta jego zawartość.
+
+- zainicjalizuj Terraform
+
+```bash
+terraform init
+```
 
 ### Krok 3 - Upewnij się, że kod jest poprawny i stwórz infrastrukturę
 
