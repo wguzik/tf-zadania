@@ -82,41 +82,41 @@ Po zakończeniu wdrożenia, sprawdź utworzone zasoby:
 - Resource Group: `rg-<project>-<environment>-<location>`
 - Logic App: `logic-vm-manager-<project>-<environment>-<location>`
 - Managed Identity: System-assigned identity z rolą "Virtual Machine Contributor"
+- Action Group: `ag-vm-manager-<project>-<environment>-<location>` - już skonfigurowana z integracją Logic App
 
 Workflow w Logic App jest obecnie placeholderem i oczekuje na implementację rzeczywistej logiki zarządzania VM.
 
-### Krok 5 - Konfiguracja Action Group z integracją Logic App
+### Krok 5 - Użycie Action Group w alertach
 
-Aby skonfigurować Action Group, która będzie wywoływać Logic App:
+Action Group została automatycznie utworzona i połączona z Logic App. Możesz teraz użyć jej w alertach Azure Monitor:
 
 1. **Otwórz Azure Portal** i przejdź do **Monitor**
 
-2. **Utwórz Action Group:**
-   - W menu wybierz **Alerts** → **Action groups**
-   - Kliknij **+ Create**
-   - Wybierz Resource Group (np. ten sam co Logic App)
-   - Podaj nazwę Action Group (np. `ag-vm-manager`) lub wybierz isniejącą
-   - Podaj Display name (np. `VM Manager Actions`)
+2. **Utwórz Alert Rule:**
+   - W menu wybierz **Alerts** → **Alert rules** → **+ Create**
+   - Wybierz zasób do monitorowania (np. VM)
+   - Skonfiguruj warunki alertu
+   - W sekcji **Actions** wybierz istniejącą Action Group: `ag-vm-manager-<postfix>`
 
-3. **Dodaj akcję Logic App:**
-   - W sekcji **Actions** kliknij **+ Add action**
-   - Action type: wybierz **Logic App**
-   - Name: podaj nazwę akcji (np. `Trigger-VM-Manager`)
-   - Logic App: wybierz utworzoną Logic App (`logic-vm-manager-<postfix>`)
-   - Enable common alert schema: zaznacz (rekomendowane)
-
-4. **Zapisz Action Group:**
-   - Kliknij **Review + create**
-   - Kliknij **Create**
-
-5. **Testowanie:**
-   - Po utworzeniu Action Group możesz ją przetestować klikając **Test action group**
+3. **Testowanie:**
+   - Po utworzeniu reguły alertu, możesz przetestować Action Group klikając **Test action group** w **Monitor** → **Alerts** → **Action groups**
    - Wybierz Sample type (np. `Metric alert`)
    - Sprawdź w Logic App **Runs history** czy workflow został uruchomiony
 
-**Uwaga:** Logic App musi posiadać trigger typu HTTP Request, aby mogła być wywoływana przez Action Group.
+**Uwaga:** Jeśli chcesz dodać Action Group do istniejącego alertu, edytuj regułę alertu i dodaj Action Group z listy.
 
-### Krok 6 - Czyszczenie zasobów
+### Krok 6 - (Opcjonalnie) Dodaj dodatkowe receivery do Action Group
+
+Możesz ręcznie rozszerzyć Action Group o dodatkowe akcje (np. email, SMS) przez portal:
+
+1. W Azure Portal przejdź do **Monitor** → **Alerts** → **Action groups**
+2. Wybierz `ag-vm-manager-<postfix>`
+3. Kliknij **Edit**
+4. Dodaj dodatkowe akcje w sekcji **Actions** (np. email receiver)
+
+**Uwaga:** Action Group została utworzona przez Terraform. Zmiany ręczne mogą zostać nadpisane przy kolejnym `terraform apply`.
+
+### Krok 7 - Czyszczenie zasobów
 
 Po zakończeniu ćwiczenia usuń utworzone zasoby:
 

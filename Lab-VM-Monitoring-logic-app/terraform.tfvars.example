@@ -1,4 +1,4 @@
 project         = "wg"
 environment     = "dev"
 location        = "westeurope"
-subscription_id = "YOUR_SUBSCRIPTION_ID_HERE"
+subscription_id = YOUR_SUBSCRIPTION_ID_HERE
