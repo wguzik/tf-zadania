@@ -64,6 +64,7 @@ resource "azurerm_monitor_action_group" "vm_manager" {
     resource_id             = azurerm_logic_app_workflow.vm_manager.id
     callback_url            = azurerm_logic_app_workflow.vm_manager.access_endpoint
     use_common_alert_schema = true
+    identity_authorization_type = "SystemAssigned"
   }
 
   tags = {
